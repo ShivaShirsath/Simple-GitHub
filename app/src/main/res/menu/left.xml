@@ -18,7 +18,6 @@
         <item
             android:id="@+id/item_package"
             android:title="Packages" />
-		
 
     </group>
 
@@ -28,9 +27,6 @@
                 android:id="@+id/item_settings"
 				android:title="Settings" />
 
-			<item
-				android:id="@+id/item_reset_user_name"
-				android:title="Reset User Name" />
         </menu>
     </item>
 
