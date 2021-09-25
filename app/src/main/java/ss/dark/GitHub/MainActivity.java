@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer_layout;
 	private NavigationView left_nav, right_nav;
 
-	private boolean desktopMode = true, darkMode = true;
+	private boolean desktopMode = false, darkMode = false;
 
 	private String git = "https://github.com/", user = "ShivaShirsath", tab = "?tab=", link = git + user, CM;
 
@@ -48,16 +48,16 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		try {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-		
+
 		setContentView(R.layout.activity_main);
-		
+
 		try {
 			setDrawers();
 			refreshWebView(link);
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
 		webView = findViewById(R.id.WebView);
 		webSettings = webView.getSettings();
-		
+
 		webSettings.setJavaScriptEnabled(true);
 
 		webSettings.setUserAgentString(
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
-				darkMode ? WebSettings.FORCE_DARK_ON 
+				darkMode ? WebSettings.FORCE_DARK_ON
 				: WebSettings.FORCE_DARK_OFF
 			);
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
-
+[A
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -357,10 +357,10 @@ public class MainActivity extends AppCompatActivity {
 			View.SYSTEM_UI_FLAG_IMMERSIVE |
 			// Set the content to appear under the system bars so that the
 			// content doesn't resize when the system bars hide and show.
-			View.SYSTEM_UI_FLAG_LAYOUT_STABLE | 
+			View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
 			View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
 			View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-			// Hide the nav bar and status bar 
+			// Hide the nav bar and status bar
 			View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
 			View.SYSTEM_UI_FLAG_FULLSCREEN
 		);
