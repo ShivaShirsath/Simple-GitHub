@@ -36,7 +36,19 @@ public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer_layout;
 	private NavigationView left_nav, right_nav;
 
-	private boolean desktopMode = false, darkMode = false;
+	private boolean
+		DesktopMode = false, 
+		DarkMode = false,
+		JavaScriptEnabled = true,
+		BuiltInZoomControls = true,
+		DisplayZoomControls = false,
+		JavaScriptCanOpenWindowsAutomatically = true,
+		LoadsImagesAutomatically = true,
+		LoadWithOverviewMode = true,
+		UseWideViewPort = true,
+		AllowContentAccess = true,
+		DomStorageEnabled = true
+	;
 
 	private String git = "https://github.com/", user = "ShivaShirsath", tab = "?tab=", link = git + user, CM;
 
@@ -56,11 +68,16 @@ public class MainActivity extends AppCompatActivity {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 
-		setContentView(R.layout.activity_main);
+	setContentView(R.layout.activity_main);
 
 		try {
+			
+			webView = findViewById(R.id.WebView);
+			webSettings = webView.getSettings();
+			
 			setDrawers();
 			refreshWebView(link);
+			
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
@@ -110,12 +127,12 @@ public class MainActivity extends AppCompatActivity {
 			public boolean onNavigationItemSelected(MenuItem item) {
 				switch (item.getItemId()) {
 					case R.id.item_desktop:
-						desktopMode = !desktopMode;
-						item.setTitle((desktopMode ? "Desktop" : "Mobile") + " Mode");
+						DesktopMode =! DesktopMode;
+						item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
 						break;
 					case R.id.item_dark:
-						darkMode = !darkMode;
-						item.setTitle((darkMode ? "Dark" : "Light") + " Mode");
+						DarkMode =! DarkMode;
+						item.setTitle((DarkMode ? "Dark" : "Light") + " Mode");
 						break;
 					case R.id.item_open_in_chrome:
 						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome"));
@@ -139,10 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private void refreshWebView(String url) {
 
-		webView = findViewById(R.id.WebView);
-		webSettings = webView.getSettings();
-
-		webSettings.setJavaScriptEnabled(true);
+		webSettings.setJavaScriptEnabled(JavaScriptEnabled);
 
 		webSettings.setUserAgentString(
 			webSettings.getUserAgentString()
@@ -152,27 +166,27 @@ public class MainActivity extends AppCompatActivity {
 							webSettings.getUserAgentString().indexOf("("),
 							webSettings.getUserAgentString().indexOf(")") + 1
 						),
-						desktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
+						DesktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
 						: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
 				)
 		); // For Desktop side toggle
         //webSettings.setSupportZoom(true);
-		webSettings.setBuiltInZoomControls(true);
-		webSettings.setDisplayZoomControls(false);
+		webSettings.setBuiltInZoomControls(BuiltInZoomControls);
+		webSettings.setDisplayZoomControls(DisplayZoomControls);
 
-		webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-		webSettings.setLoadsImagesAutomatically(true);
+		webSettings.setJavaScriptCanOpenWindowsAutomatically(JavaScriptCanOpenWindowsAutomatically);
+		webSettings.setLoadsImagesAutomatically(LoadsImagesAutomatically);
 
 		webView.setInitialScale(1);
-		webSettings.setLoadWithOverviewMode(true);
-		webSettings.setUseWideViewPort(true);
+		webSettings.setLoadWithOverviewMode(LoadWithOverviewMode);
+		webSettings.setUseWideViewPort(UseWideViewPort);
 
-		webSettings.setAllowContentAccess(true);
-		webSettings.setDomStorageEnabled(true);
+		webSettings.setAllowContentAccess(AllowContentAccess);
+		webSettings.setDomStorageEnabled(DomStorageEnabled);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
-				darkMode ? WebSettings.FORCE_DARK_ON
+				DarkMode ? WebSettings.FORCE_DARK_ON
 				: WebSettings.FORCE_DARK_OFF
 			);
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -183,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
-[A
+
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -193,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if (url.contains("github")) {
 					if (url.contains("raw")) {
-						setDownload(user + "@GitHub/" + url.substring(url.lastIndexOf("/") + 1), user + "@GitHub/" + url.substring(url.lastIndexOf("/") + 1), url);
+						setDownload( url);
 					} else {
 						view.loadUrl(url);
 					}
@@ -295,8 +309,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
+	@Override public void onBackPressed() {
 		if (drawer_layout.isDrawerOpen(left_nav) || drawer_layout.isDrawerOpen(right_nav)) {
 			drawer_layout.closeDrawers();
 		} else if (webView.canGoBack()) {
@@ -310,9 +323,9 @@ public class MainActivity extends AppCompatActivity {
 		}
 		backPressedTime = System.currentTimeMillis();
 	}
-
 	@Override public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+		Toast.makeText(MainActivity.this, "New Config : " + newConfig, Toast.LENGTH_LONG).show();
 	}
 	@Override protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -325,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
-			hideSystemUI();
+			Toast.makeText(MainActivity.this, "Focus " + hasFocus , Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -339,41 +352,27 @@ public class MainActivity extends AppCompatActivity {
 		return intent;
 	}
 
-	public void setDownload(String msg, String fileName, String url) {
+	public void setDownload(String url) {
 		DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 		request.allowScanningByMediaScanner();
 		request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+		request.setDestinationInExternalPublicDir(
+			Environment.DIRECTORY_DOWNLOADS, // This is Download Directory
+			url.substring(
+				url.indexOf(".com/")+5,
+				( url.indexOf(".com/")+5 ) + 
+				url.substring(
+					url.indexOf(".com/")+5
+				)
+				.indexOf("/")
+			) + // This is Folder Name
+			"/" + 
+			url.substring(
+				url.lastIndexOf("/")+1
+			) // This is File Name
+		);
 		((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(request);
-		Toast.makeText(getApplicationContext(), msg + " ( " + fileName + " )", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
 	}
 
-	private void hideSystemUI() {
-		// Enables regular immersive mode.
-		// For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-		// Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(
-			View.SYSTEM_UI_FLAG_IMMERSIVE |
-			// Set the content to appear under the system bars so that the
-			// content doesn't resize when the system bars hide and show.
-			View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-			View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-			View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-			// Hide the nav bar and status bar
-			View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-			View.SYSTEM_UI_FLAG_FULLSCREEN
-		);
-	}
-
-	// Shows the system bars by removing all the flags
-// except for the ones that make the content appear under the system bars.
-	private void showSystemUI() {
-		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(
-			View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-			View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-			View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-		);
-	}
 }
