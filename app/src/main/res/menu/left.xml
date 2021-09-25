@@ -8,7 +8,7 @@
         <item
             android:id="@+id/item_newRepo"
             android:title="New" />
-		<item
+        <item
             android:id="@+id/item_repo"
             android:title="Repositories" />
         <item
@@ -25,7 +25,7 @@
         <menu>
             <item
                 android:id="@+id/item_settings"
-				android:title="Settings" />
+                android:title="Settings" />
 
         </menu>
     </item>
