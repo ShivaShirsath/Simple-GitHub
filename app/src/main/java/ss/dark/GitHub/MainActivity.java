@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 		
 		try {
 			setDrawers();
-			setWebView();
+			refreshWebView(link);
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 					default:
 						Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
 				}
-				setWebView();
+				refreshWebView(link);
 
 				drawer_layout.closeDrawers();
 				return true;
@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 			public boolean onNavigationItemSelected(MenuItem item) {
 				switch (item.getItemId()) {
 					case R.id.item_desktop:
-						//link = "https://docs.github.com/";
 						desktopMode = !desktopMode;
 						item.setTitle((desktopMode ? "Desktop" : "Mobile") + " Mode");
 						break;
@@ -121,10 +120,16 @@ public class MainActivity extends AppCompatActivity {
 					case R.id.item_open_in_chrome:
 						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome"));
 						break;
+					case R.id.item_reload:
+						refreshWebView(webView.getUrl());
+						break;
+					case R.id.item_help:
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome"));
+						break;
 					default:
 						Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
 				}
-				setWebView();
+				refreshWebView(webView.getUrl());
 
 				drawer_layout.closeDrawers();
 				return true;
@@ -132,12 +137,11 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 
-	private void setWebView() {
+	private void refreshWebView(String url) {
 
 		webView = findViewById(R.id.WebView);
-		webView.loadUrl(link);
-
 		webSettings = webView.getSettings();
+		
 		webSettings.setJavaScriptEnabled(true);
 
 		webSettings.setUserAgentString(
@@ -252,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			}
 		});
-		webView.reload();
+		webView.loadUrl(url);
 	}
 
 	@Override

@@ -12,5 +12,13 @@
     <item
         android:id="@+id/item_open_in_chrome"
         android:title="Open in Chrome" />
+	
+	<item
+        android:id="@+id/item_reload"
+        android:title="Reload" />
 
+	<item
+        android:id="@+id/item_help"
+        android:title="Help" />
+	
 </menu>
