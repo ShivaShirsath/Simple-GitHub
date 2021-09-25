@@ -48,13 +48,16 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		try {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
+		
 		setContentView(R.layout.activity_main);
+		
 		try {
 			setDrawers();
 			setWebView();
@@ -145,10 +148,8 @@ public class MainActivity extends AppCompatActivity {
 							webSettings.getUserAgentString().indexOf("("),
 							webSettings.getUserAgentString().indexOf(")") + 1
 						),
-						desktopMode ?
-							"(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
-						:
-							"(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
+						desktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
+						: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
 				)
 		); // For Desktop side toggle
         //webSettings.setSupportZoom(true);
@@ -166,7 +167,10 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDomStorageEnabled(true);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			webSettings.setForceDark(darkMode ? WebSettings.FORCE_DARK_ON : WebSettings.FORCE_DARK_OFF);
+			webSettings.setForceDark(
+				darkMode ? WebSettings.FORCE_DARK_ON 
+				: WebSettings.FORCE_DARK_OFF
+			);
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			webSettings.setMixedContentMode(0);
 			webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -303,22 +307,18 @@ public class MainActivity extends AppCompatActivity {
 		backPressedTime = System.currentTimeMillis();
 	}
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	@Override public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	@Override protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		webView.saveState(outState);
 	}
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	@Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		webView.restoreState(savedInstanceState);
 	}
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
+	@Override public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
 			hideSystemUI();
@@ -350,15 +350,16 @@ public class MainActivity extends AppCompatActivity {
 		// Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(
-				View.SYSTEM_UI_FLAG_IMMERSIVE
-						// Set the content to appear under the system bars so that the
-						// content doesn't resize when the system bars hide and show.
-						| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-						// Hide the nav bar and status bar
-						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-						| View.SYSTEM_UI_FLAG_FULLSCREEN);
+			View.SYSTEM_UI_FLAG_IMMERSIVE |
+			// Set the content to appear under the system bars so that the
+			// content doesn't resize when the system bars hide and show.
+			View.SYSTEM_UI_FLAG_LAYOUT_STABLE | 
+			View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+			View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+			// Hide the nav bar and status bar 
+			View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+			View.SYSTEM_UI_FLAG_FULLSCREEN
+		);
 	}
 
 	// Shows the system bars by removing all the flags
@@ -366,8 +367,9 @@ public class MainActivity extends AppCompatActivity {
 	private void showSystemUI() {
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(
-				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+			View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+			View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+			View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+		);
 	}
 }
