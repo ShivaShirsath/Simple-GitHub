@@ -29,6 +29,15 @@ import java.io.File;
 import java.util.Date;
 import android.net.ConnectivityManager;
 import android.content.Context;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import org.json.JSONObject;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
+		
+		GitHelper helper = new GitHelper(this);
 	}	
 	//}
 
