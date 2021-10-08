@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
+import android.net.ConnectivityManager;
+import android.content.Context;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private boolean
 		DesktopMode = false, 
-		DarkMode = false,
+		ForceDark = false,
 		JavaScriptEnabled = true,
 		BuiltInZoomControls = true,
 		DisplayZoomControls = false,
@@ -70,18 +72,23 @@ public class MainActivity extends AppCompatActivity {
 
 	setContentView(R.layout.activity_main);
 
+	//if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null || ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected() == false) {
+		//webView.loadData("<h1>Pas de connexion internet...<h1>", "text/html", null);
+     //   return;
+	//} else {
 		try {
-			
+
 			webView = findViewById(R.id.WebView);
 			webSettings = webView.getSettings();
-			
+
 			setDrawers();
 			refreshWebView(link);
-			
+
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-	}
+	}	
+	//}
 
 	private void setDrawers() {
 		drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -131,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
 						item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
 						break;
 					case R.id.item_dark:
-						DarkMode =! DarkMode;
-						item.setTitle((DarkMode ? "Dark" : "Light") + " Mode");
+						ForceDark =! ForceDark;
+						item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
 						break;
 					case R.id.item_open_in_chrome:
 						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome"));
@@ -142,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
 						break;
 					case R.id.item_help:
 						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome"));
+						break;
+					case R.id.item_agent:
+						Toast.makeText(MainActivity.this, webView.getSettings().getUserAgentString(), Toast.LENGTH_LONG).show();
 						break;
 					default:
 						Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
@@ -158,18 +168,22 @@ public class MainActivity extends AppCompatActivity {
 
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);
 
-		webSettings.setUserAgentString(
-			webSettings.getUserAgentString()
-				.replace(
-					webSettings.getUserAgentString()
-						.substring(
-							webSettings.getUserAgentString().indexOf("("),
-							webSettings.getUserAgentString().indexOf(")") + 1
-						),
-						DesktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
-						: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
-				)
-		); // For Desktop side toggle
+		webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
+		// "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36");
+		// "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36");
+
+//		webSettings.setUserAgentString(
+//			webSettings.getUserAgentString()
+//				.replace(
+//					webSettings.getUserAgentString()
+//						.substring(
+//							webSettings.getUserAgentString().indexOf("("),
+//							webSettings.getUserAgentString().indexOf(")") + 1
+//						),
+//						DesktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
+//						: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
+//				)
+//		); // For Desktop side toggle
         //webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(BuiltInZoomControls);
 		webSettings.setDisplayZoomControls(DisplayZoomControls);
@@ -186,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
-				DarkMode ? WebSettings.FORCE_DARK_ON
+				ForceDark ? WebSettings.FORCE_DARK_ON
 				: WebSettings.FORCE_DARK_OFF
 			);
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -197,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
-
+		
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {

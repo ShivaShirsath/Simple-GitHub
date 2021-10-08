@@ -21,4 +21,8 @@
         android:id="@+id/item_help"
         android:title="Help" />
 	
+	<item
+        android:id="@+id/item_agent"
+        android:title="Agent" />
+	
 </menu>
