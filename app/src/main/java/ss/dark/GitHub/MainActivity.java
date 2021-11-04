@@ -38,6 +38,9 @@ import org.json.JSONObject;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import org.json.JSONArray;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.KeyEvent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,25 +51,25 @@ public class MainActivity extends AppCompatActivity {
 	private NavigationView left_nav, right_nav;
 
 	private boolean
-		DesktopMode = false, 
-		ForceDark = false,
-		JavaScriptEnabled = true,
-		BuiltInZoomControls = true,
-		DisplayZoomControls = false,
-		JavaScriptCanOpenWindowsAutomatically = true,
-		LoadsImagesAutomatically = true,
-		LoadWithOverviewMode = true,
-		UseWideViewPort = true,
-		AllowContentAccess = true,
-		DomStorageEnabled = true
+	DesktopMode = false, 
+	ForceDark = false,
+	JavaScriptEnabled = true,
+	BuiltInZoomControls = true,
+	DisplayZoomControls = false,
+	JavaScriptCanOpenWindowsAutomatically = true,
+	LoadsImagesAutomatically = true,
+	LoadWithOverviewMode = true,
+	UseWideViewPort = true,
+	AllowContentAccess = true,
+	DomStorageEnabled = true
 	;
 
 	private String git = "https://github.com/", user = "ShivaShirsath", tab = "?tab=", link = git + user, CM;
 
 	private ValueCallback<Uri> UM;
 	private ValueCallback<Uri[]> UMA;
-
 	private long backPressedTime = 0;
+	private int focus = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,100 +82,102 @@ public class MainActivity extends AppCompatActivity {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 
-	setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);
+		webView = findViewById(R.id.WebView);
+		webSettings = webView.getSettings();
 
-	//if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null || ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected() == false) {
-		//webView.loadData("<h1>Pas de connexion internet...<h1>", "text/html", null);
-     //   return;
-	//} else {
-		try {
+		loadAll();
+	}
+	private void loadAll() {
+		if (
+			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null 
+			||
+			!((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
+			) {
+			showDialog("No Internet Connection !");
+		} else if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
+			try {
+				setDrawers();
+				refreshWebView(link);
+			} catch (Exception e) {
+				Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+			}
 
-			webView = findViewById(R.id.WebView);
-			webSettings = webView.getSettings();
-
-			setDrawers();
-			refreshWebView(link);
-
-		} catch (Exception e) {
-			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+			//GitHelper helper = new GitHelper(this);
 		}
-		
-		GitHelper helper = new GitHelper(this);
-	}	
-	//}
-
+	}
 	private void setDrawers() {
 		drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		left_nav = (NavigationView) findViewById(R.id.left_nav);
 		right_nav = (NavigationView) findViewById(R.id.right_nav);
 
 		left_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-			@Override
-			public boolean onNavigationItemSelected(MenuItem item) {
-				if ((!item.getTitle().equals(user)) && item.getItemId() == R.id.item_user)
-					item.setTitle(user);
-				switch (item.getItemId()) {
-					case R.id.item_user:
-						link = git + item.getTitle();
-						break;
-					case R.id.item_newRepo:
-						link = git + String.valueOf(item.getTitle()).toLowerCase();
-						break;
-					case R.id.item_repo:
-						link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
-						break;
-					case R.id.item_project:
-						link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
-						break;
-					case R.id.item_package:
-						link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
-						break;
-					case R.id.item_settings:
-						link = git + String.valueOf(item.getTitle()).toLowerCase();
-						break;
-					default:
-						Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
-				}
-				refreshWebView(link);
+				@Override
+				public boolean onNavigationItemSelected(MenuItem item) {
+					if ((!item.getTitle().equals(user)) && item.getItemId() == R.id.item_user)
+						item.setTitle(user);
+					switch (item.getItemId()) {
+						case R.id.item_user:
+							link = git + item.getTitle();
+							break;
+						case R.id.item_newRepo:
+							link = git + String.valueOf(item.getTitle()).toLowerCase();
+							break;
+						case R.id.item_repo:
+							link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
+							break;
+						case R.id.item_project:
+							link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
+							break;
+						case R.id.item_package:
+							link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
+							break;
+						case R.id.item_settings:
+							link = git + String.valueOf(item.getTitle()).toLowerCase();
+							break;
+						default:
+							Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+					}
+					refreshWebView(link);
 
-				drawer_layout.closeDrawers();
-				return true;
-			}
-		});
+					drawer_layout.closeDrawers();
+					return true;
+				}
+			});
 
 		right_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-			@Override
-			public boolean onNavigationItemSelected(MenuItem item) {
-				switch (item.getItemId()) {
-					case R.id.item_desktop:
-						DesktopMode =! DesktopMode;
-						item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
-						break;
-					case R.id.item_dark:
-						ForceDark =! ForceDark;
-						item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
-						break;
-					case R.id.item_open_in_chrome:
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome"));
-						break;
-					case R.id.item_reload:
-						refreshWebView(webView.getUrl());
-						break;
-					case R.id.item_help:
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome"));
-						break;
-					case R.id.item_agent:
-						Toast.makeText(MainActivity.this, webView.getSettings().getUserAgentString(), Toast.LENGTH_LONG).show();
-						break;
-					default:
-						Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
-				}
-				refreshWebView(webView.getUrl());
+				@Override
+				public boolean onNavigationItemSelected(MenuItem item) {
+					switch (item.getItemId()) {
+						case R.id.item_desktop:
+							DesktopMode = ! DesktopMode;
+							item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
+							break;
+						case R.id.item_dark:
+							ForceDark = ! ForceDark;
+							item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
+							break;
+						case R.id.item_open_in_chrome:
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome"));
+							break;
+						case R.id.item_reload:
+							webView.reload();
+							break;
+						case R.id.item_help:
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome"));
+							break;
+						case R.id.item_agent:
+							Toast.makeText(MainActivity.this, webView.getSettings().getUserAgentString(), Toast.LENGTH_LONG).show();
+							break;
+						default:
+							Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+					}
+					refreshWebView(webView.getUrl());
 
-				drawer_layout.closeDrawers();
-				return true;
-			}
-		});
+					drawer_layout.closeDrawers();
+					return true;
+				}
+			});
 	}
 
 	private void refreshWebView(String url) {
@@ -183,18 +188,18 @@ public class MainActivity extends AppCompatActivity {
 		// "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36");
 		// "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36");
 
-//		webSettings.setUserAgentString(
-//			webSettings.getUserAgentString()
-//				.replace(
-//					webSettings.getUserAgentString()
-//						.substring(
-//							webSettings.getUserAgentString().indexOf("("),
-//							webSettings.getUserAgentString().indexOf(")") + 1
-//						),
-//						DesktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
-//						: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
-//				)
-//		); // For Desktop side toggle
+		webSettings.setUserAgentString(
+			webSettings.getUserAgentString()
+			.replace(
+				webSettings.getUserAgentString()
+				.substring(
+					webSettings.getUserAgentString().indexOf("("),
+					webSettings.getUserAgentString().indexOf(")") + 1
+				),
+				DesktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
+				: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
+			)
+		); // For Desktop side toggle
         //webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(BuiltInZoomControls);
 		webSettings.setDisplayZoomControls(DisplayZoomControls);
@@ -222,79 +227,79 @@ public class MainActivity extends AppCompatActivity {
 		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
-		
+
 		webView.setWebViewClient(new WebViewClient() {
-			@Override
-			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-				Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
-			}
-			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url.contains("github")) {
-					if (url.contains("raw")) {
-						setDownload( url);
-					} else {
-						view.loadUrl(url);
-					}
-				} else {
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				@Override
+				public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+					Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
 				}
-				return true;
-			}
-		});
+				@Override
+				public boolean shouldOverrideUrlLoading(WebView view, String url) {
+					if (url.contains("github")) {
+						if (url.contains("raw")) {
+							setDownload(url);
+						} else {
+							view.loadUrl(url);
+						}
+					} else {
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+					}
+					return true;
+				}
+			});
 
 		webView.setWebChromeClient(new WebChromeClient() {
-			//For Android 3.0+
-			public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-				fileChooser(uploadMsg);
-			}
-			// For Android 3.0+, above method not supported in some android 3+ versions, in such case we use this
-			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-				fileChooser(uploadMsg);
-			}
-			//For Android 4.1+
-			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-				fileChooser(uploadMsg);
-			}
-			//For Android 5.0+
-			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
-				if (UMA != null) {
-					UMA.onReceiveValue(null);
+				//For Android 3.0+
+				public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+					fileChooser(uploadMsg);
 				}
-				UMA = filePathCallback;
-				Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-					File photoFile = null;
-					try {
-						@SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-						String imageFileName = "img_" + timeStamp + "_";
-						File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-						photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
-						takePictureIntent.putExtra("PhotoPath", CM);
-					} catch (Exception e) {
-						Toast.makeText(MainActivity.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+				// For Android 3.0+, above method not supported in some android 3+ versions, in such case we use this
+				public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+					fileChooser(uploadMsg);
+				}
+				//For Android 4.1+
+				public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+					fileChooser(uploadMsg);
+				}
+				//For Android 5.0+
+				public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+					if (UMA != null) {
+						UMA.onReceiveValue(null);
 					}
-					if (photoFile != null) {
-						CM = "file:" + photoFile.getAbsolutePath();
-						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+					UMA = filePathCallback;
+					Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+						File photoFile = null;
+						try {
+							@SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+							String imageFileName = "img_" + timeStamp + "_";
+							File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+							photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+							takePictureIntent.putExtra("PhotoPath", CM);
+						} catch (Exception e) {
+							Toast.makeText(MainActivity.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+						}
+						if (photoFile != null) {
+							CM = "file:" + photoFile.getAbsolutePath();
+							takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+						} else {
+							takePictureIntent = null;
+						}
+					}
+					Intent[] intentArray;
+					if (takePictureIntent != null) {
+						intentArray = new Intent[]{takePictureIntent};
 					} else {
-						takePictureIntent = null;
+						intentArray = new Intent[0];
 					}
+					Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+					chooserIntent.putExtra(Intent.EXTRA_INTENT, fileChooser(null));
+					chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an Action");
+					chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+					startActivityForResult(chooserIntent, 1);
+					return true;
 				}
-				Intent[] intentArray;
-				if (takePictureIntent != null) {
-					intentArray = new Intent[]{takePictureIntent};
-				} else {
-					intentArray = new Intent[0];
-				}
-				Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-				chooserIntent.putExtra(Intent.EXTRA_INTENT, fileChooser(null));
-				chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an Action");
-				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-				startActivityForResult(chooserIntent, 1);
-				return true;
-			}
-		});
+			});
 		webView.loadUrl(url);
 	}
 
@@ -333,7 +338,6 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 	}
-
 	@Override public void onBackPressed() {
 		if (drawer_layout.isDrawerOpen(left_nav) || drawer_layout.isDrawerOpen(right_nav)) {
 			drawer_layout.closeDrawers();
@@ -362,9 +366,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 	@Override public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus) {
-			Toast.makeText(MainActivity.this, "Focus " + hasFocus , Toast.LENGTH_LONG).show();
-		}
+		Toast.makeText(MainActivity.this, "Welcome" + (focus==0 ?"" :" Back") , Toast.LENGTH_LONG).show();
+		focus ++;
 	}
 
 	public Intent fileChooser(ValueCallback<Uri> uploadMsg) {
@@ -384,20 +387,40 @@ public class MainActivity extends AppCompatActivity {
 		request.setDestinationInExternalPublicDir(
 			Environment.DIRECTORY_DOWNLOADS, // This is Download Directory
 			url.substring(
-				url.indexOf(".com/")+5,
-				( url.indexOf(".com/")+5 ) + 
+				url.indexOf(".com/") + 5,
+				(url.indexOf(".com/") + 5) + 
 				url.substring(
-					url.indexOf(".com/")+5
+					url.indexOf(".com/") + 5
 				)
 				.indexOf("/")
 			) + // This is Folder Name
 			"/" + 
 			url.substring(
-				url.lastIndexOf("/")+1
+				url.lastIndexOf("/") + 1
 			) // This is File Name
 		);
 		((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(request);
 		Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
 	}
+	public void showDialog(String title) {
+		AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+			.setTitle(title)
+			.setCancelable(false).setNegativeButton("Exit", new DialogInterface.OnClickListener(){
 
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+					dialog.dismiss();
+				}
+			})
+			.setPositiveButton("Rel⟳ad", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					loadAll();
+					dialog.dismiss();
+				}
+			})
+			.create();
+		dialog.show();
+	}
 }

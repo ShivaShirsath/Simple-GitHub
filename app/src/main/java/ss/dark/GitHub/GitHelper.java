@@ -12,40 +12,42 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 public class GitHelper {
-	private Context context = null;
-	private JSONObject obj ;
-	private JSONArray array ;
-	public GitHelper(Context context){
-		this.context = context ;
+	public static Context context = null;
+	public static JSONObject obj ;
+	public static JSONArray array ;
+	public static String username;
+	GitHelper(Context context, String username){
+		this.context = context;
+		this.username = username;
 	}
-	public JSONObject getJSONobject(){
-		Volley.newRequestQueue(this.context).add(
-			new JsonObjectRequest(
+	public static JSONObject getJSONobject(){
+		Volley.newRequestQueue(context).add(
+			new JsonArrayRequest(
 				Request.Method.GET,
 				"https://api.github.com/users/ShivaShirsath",
 				null,
-				new Response.Listener<JSONObject>(){
+				new Response.Listener<JSONArray>(){
 					@Override
-					public void onResponse(JSONObject response) {
+					public void onResponse(JSONArray response) {
 						try{
-							obj = response ;
+							array = response ;
 						} catch(Exception e){
-							e.printStackTrace();
+							Toast.makeText(context,"JSON() :" + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					}
 				},
 				new Response.ErrorListener(){
 					@Override
 					public void onErrorResponse(VolleyError e) {
-
+						Toast.makeText(context,"JSON(error) :" + e.getMessage(), Toast.LENGTH_LONG).show();
 					}
 				}
 			)
 		);
 		return obj ;
 	}
-	public JSONArray getJSONarray(){
-		Volley.newRequestQueue(this.context).add(
+	public static JSONArray getJSONarray(){
+		Volley.newRequestQueue(context).add(
 			new JsonArrayRequest(
 				Request.Method.GET,
 				"https://api.github.com/users/ShivaShirsath/repos",
@@ -56,14 +58,14 @@ public class GitHelper {
 						try{
 							array = response ;
 						} catch(Exception e){
-							e.printStackTrace();
+							Toast.makeText(context, "JSON[] :" + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					}
 				},
 				new Response.ErrorListener(){
 					@Override
 					public void onErrorResponse(VolleyError e) {
-
+						Toast.makeText(context, "JSON[error] :" + e.getMessage(), Toast.LENGTH_LONG).show();
 					}
 				}
 			)
