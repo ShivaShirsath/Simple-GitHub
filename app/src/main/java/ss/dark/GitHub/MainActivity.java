@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 	private void loadAll() {
 		if (
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null 
-			||!
+			|| !
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
 			) {
 			showDialog("No Internet Connection !");
@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	@Override public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus==0 ?"" :" Back") : "Bye…" , Toast.LENGTH_LONG).show();
+		Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ?"" : " Back") : "Bye…" , Toast.LENGTH_LONG).show();
 		focus ++;
 	}
 
@@ -376,20 +376,19 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void setDownload(String url) {
-		DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-		request.allowScanningByMediaScanner();
-		request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-		request.setDestinationInExternalPublicDir(
-			Environment.DIRECTORY_DOWNLOADS, // This is Download Directory
-			url.substring(
-				url.indexOf(".com/") + 5,
-				(url.indexOf(".com/") + 5) + url.substring(url.indexOf(".com/") + 5).indexOf("/")
-			) + "/" + // This is Folder Name 
-			url.substring(
-				url.lastIndexOf("/") + 1
-			) // This is File Name
+
+		((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(
+			new DownloadManager.Request(Uri.parse(url))
+			.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED) /*Notify client once download is completed.*/
+			.setDestinationInExternalPublicDir(
+				Environment.DIRECTORY_DOWNLOADS, // This is Download Directory
+				url.substring(
+					url.indexOf(".com/") + 5,
+					(url.indexOf(".com/") + 5) + url.substring(url.indexOf(".com/") + 5).indexOf("/")
+				) + "/" + // This is Folder Name 
+				url.substring(url.lastIndexOf("/") + 1) // This is File Name
+			)
 		);
-		((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(request);
 		Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
 	}
 	public void showDialog(String title) {
@@ -406,8 +405,7 @@ public class MainActivity extends AppCompatActivity {
 					loadAll();
 					dialog.dismiss();
 				}
-			})
-			.create();
+			}).create();
 		dialog.show();
 	}
 }
