@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
 			} catch (Exception e) {
 				Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 			}
-
-			//GitHelper helper = new GitHelper(this);
 		}
 	}
 	private void setDrawers() {
@@ -196,7 +194,8 @@ public class MainActivity extends AppCompatActivity {
 					webSettings.getUserAgentString().indexOf("("),
 					webSettings.getUserAgentString().indexOf(")") + 1
 				),
-				DesktopMode ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
+				DesktopMode 
+				? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
 				: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
 			)
 		); // For Desktop side toggle
@@ -354,7 +353,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 	@Override public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		Toast.makeText(MainActivity.this, "New Config : " + newConfig, Toast.LENGTH_LONG).show();
 	}
 	@Override protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -366,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	@Override public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		Toast.makeText(MainActivity.this, "Welcome" + (focus==0 ?"" :" Back") , Toast.LENGTH_LONG).show();
+		Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus==0 ?"" :" Back") : "Bye…" , Toast.LENGTH_LONG).show();
 		focus ++;
 	}
 
@@ -406,16 +404,13 @@ public class MainActivity extends AppCompatActivity {
 		AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
 			.setTitle(title)
 			.setCancelable(false).setNegativeButton("Exit", new DialogInterface.OnClickListener(){
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				@Override public void onClick(DialogInterface dialog, int which) {
 					finish();
 					dialog.dismiss();
 				}
 			})
 			.setPositiveButton("Rel⟳ad", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				@Override public void onClick(DialogInterface dialog, int which) {
 					loadAll();
 					dialog.dismiss();
 				}
