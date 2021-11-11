@@ -71,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
 	private long backPressedTime = 0;
 	private int focus = 0;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		try {
@@ -91,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
 	private void loadAll() {
 		if (
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null 
-			||
-			!((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
+			||!
+			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
 			) {
 			showDialog("No Internet Connection !");
 		} else if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
@@ -215,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
-				ForceDark ? WebSettings.FORCE_DARK_ON
+				ForceDark 
+				? WebSettings.FORCE_DARK_ON
 				: WebSettings.FORCE_DARK_OFF
 			);
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -228,12 +228,10 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		webView.setWebViewClient(new WebViewClient() {
-				@Override
-				public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+				@Override public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 					Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
 				}
-				@Override
-				public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				@Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
 					if (url.contains("github")) {
 						if (url.contains("raw")) {
 							setDownload(url);
@@ -302,8 +300,7 @@ public class MainActivity extends AppCompatActivity {
 		webView.loadUrl(url);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	@Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			Uri[] results = null;
@@ -386,13 +383,8 @@ public class MainActivity extends AppCompatActivity {
 			Environment.DIRECTORY_DOWNLOADS, // This is Download Directory
 			url.substring(
 				url.indexOf(".com/") + 5,
-				(url.indexOf(".com/") + 5) + 
-				url.substring(
-					url.indexOf(".com/") + 5
-				)
-				.indexOf("/")
-			) + // This is Folder Name
-			"/" + 
+				(url.indexOf(".com/") + 5) + url.substring(url.indexOf(".com/") + 5).indexOf("/")
+			) + "/" + // This is Folder Name 
 			url.substring(
 				url.lastIndexOf("/") + 1
 			) // This is File Name
