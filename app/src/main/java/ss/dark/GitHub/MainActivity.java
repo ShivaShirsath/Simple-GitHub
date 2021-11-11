@@ -376,7 +376,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void setDownload(String url) {
-
 		((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(
 			new DownloadManager.Request(Uri.parse(url))
 			.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED) /*Notify client once download is completed.*/
