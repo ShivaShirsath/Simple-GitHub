@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private boolean
 	DesktopMode = false, 
-	ForceDark = false,
+	ForceDark = true,
 	JavaScriptEnabled = true,
 	BuiltInZoomControls = true,
 	DisplayZoomControls = false,
