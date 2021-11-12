@@ -169,8 +169,9 @@ public class MainActivity extends AppCompatActivity {
 	private void refreshWebView(String url) {
 
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);
-
-		webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
+		
+		webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
+		//webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
 		/*webSettings.setUserAgentString(
 		 webSettings.getUserAgentString()
 		 .replace(
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
-				ForceDark 
+				(getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES 
 				? WebSettings.FORCE_DARK_ON
 				: WebSettings.FORCE_DARK_OFF
 			);
@@ -336,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	@Override public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+		refreshWebView(webView.getUrl());
 	}
 	@Override protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
