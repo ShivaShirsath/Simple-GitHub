@@ -50,10 +50,14 @@ public class MainActivity extends AppCompatActivity {
 	LoadWithOverviewMode = true,
 	UseWideViewPort = true,
 	AllowContentAccess = true,
-	DomStorageEnabled = true
-	;
+	DomStorageEnabled = true;
 
-	private String git = "https://github.com/", user = "ShivaShirsath", tab = "?tab=", link = git + user, CM;
+	private String
+	git = "https://github.com/", 
+	user = "ShivaShirsath",
+	tab = "?tab=",
+	link = git + user, 
+	CM;
 
 	private ValueCallback<Uri> UM;
 	private ValueCallback<Uri[]> UMA;
@@ -66,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
 		try {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+			setContentView(R.layout.activity_main);
+			webView = findViewById(R.id.WebView);
+			webSettings = webView.getSettings();
+
+			loadAll();
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-
-		setContentView(R.layout.activity_main);
-		webView = findViewById(R.id.WebView);
-		webSettings = webView.getSettings();
-
-		loadAll();
 	}
 	private void loadAll() {
 		if (
@@ -84,12 +88,8 @@ public class MainActivity extends AppCompatActivity {
 			) {
 			showDialog("No Internet Connection !");
 		} else if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
-			try {
-				setDrawers();
-				refreshWebView(link);
-			} catch (Exception e) {
-				Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-			}
+			setDrawers();
+			refreshWebView(link);
 		}
 	}
 	private void setDrawers() {
@@ -171,22 +171,19 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);
 
 		webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
-		// "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36");
-		// "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36");
-
-		webSettings.setUserAgentString(
-			webSettings.getUserAgentString()
-			.replace(
-				webSettings.getUserAgentString()
-				.substring(
-					webSettings.getUserAgentString().indexOf("("),
-					webSettings.getUserAgentString().indexOf(")") + 1
-				),
-				DesktopMode 
-				? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*/
-				: "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
-			)
-		); // For Desktop side toggle
+		/*webSettings.setUserAgentString(
+		 webSettings.getUserAgentString()
+		 .replace(
+		 webSettings.getUserAgentString()
+		 .substring(
+		 webSettings.getUserAgentString().indexOf("("),
+		 webSettings.getUserAgentString().indexOf(")") + 1
+		 ),
+		 DesktopMode 
+		 ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*
+		 : "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
+		 )
+		 );*/ // For Desktop side toggle
         //webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(BuiltInZoomControls);
 		webSettings.setDisplayZoomControls(DisplayZoomControls);

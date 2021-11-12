@@ -1,63 +1,62 @@
 package ss.dark.GitHub;
 
-import com.android.volley.toolbox.Volley;
 import android.content.Context;
-import com.android.volley.toolbox.JsonArrayRequest;
+import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import org.json.JSONArray;
-import android.widget.Toast;
-import org.json.JSONObject;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GitHelper {
 	public static Context context = null;
 	public static JSONObject obj ;
 	public static JSONArray array ;
-	public static String username;
-	GitHelper(Context context, String username){
+	public GitHelper(Context context) {
 		this.context = context;
-		this.username = username;
+
 	}
-	public static JSONObject getJSONobject(){
+	public static JSONObject getJSONobject(String user) {
 		Volley.newRequestQueue(context).add(
-			new JsonArrayRequest(
+			new JsonObjectRequest(
 				Request.Method.GET,
-				"https://api.github.com/users/ShivaShirsath",
+				"https://api.github.com/users/" + user,
 				null,
-				new Response.Listener<JSONArray>(){
+				new Response.Listener<JSONObject>(){
 					@Override
-					public void onResponse(JSONArray response) {
-						try{
-							array = response ;
-						} catch(Exception e){
-							Toast.makeText(context,"JSON() :" + e.getMessage(), Toast.LENGTH_LONG).show();
+					public void onResponse(JSONObject response) {
+						try {
+							obj = response ;
+						} catch (Exception e) {
+							Toast.makeText(context, "JSON() :" + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					}
 				},
 				new Response.ErrorListener(){
 					@Override
 					public void onErrorResponse(VolleyError e) {
-						Toast.makeText(context,"JSON(error) :" + e.getMessage(), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "JSON(error) :" + e.getMessage(), Toast.LENGTH_LONG).show();
 					}
 				}
 			)
 		);
-		return obj ;
+		return obj;
 	}
-	public static JSONArray getJSONarray(){
+	public static JSONArray getJSONarray(String url) {
 		Volley.newRequestQueue(context).add(
 			new JsonArrayRequest(
 				Request.Method.GET,
-				"https://api.github.com/users/ShivaShirsath/repos",
+				url,
 				null,
 				new Response.Listener<JSONArray>(){
 					@Override
 					public void onResponse(JSONArray response) {
-						try{
+						try {
 							array = response ;
-						} catch(Exception e){
+						} catch (Exception e) {
 							Toast.makeText(context, "JSON[] :" + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					}
@@ -72,5 +71,4 @@ public class GitHelper {
 		);
 		return array ;
 	}
-	
 }
