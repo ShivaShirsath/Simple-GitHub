@@ -1,4 +1,4 @@
-package ss.dark.github;
+package ss.dark.GitHub;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 	private void refreshWebView(String url) {
 
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);
-
+		
 		webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
 		//webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
 		/*webSettings.setUserAgentString(
