@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:opacity="0.75"
+        
         android:fitsSystemWindows="true"
         app:menu="@menu/left" />
 
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:opacity="0.75"
+        
         android:fitsSystemWindows="true"
         app:menu="@menu/right" />
 	<!-- android:background="#00000000" -->
