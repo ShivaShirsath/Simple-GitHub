@@ -1,4 +1,4 @@
-package ss.dark.GitHub;
+package ss.dark.github;
 
 import android.content.Context;
 import android.widget.Toast;
