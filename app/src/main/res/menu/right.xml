@@ -22,7 +22,7 @@
         android:title="Help" />
 	
 	<item
-        android:id="@+id/item_agent"
-        android:title="Agent" />
+        android:id="@+id/item_vscode"
+        android:title="Open VS code" />
 	
 </menu>

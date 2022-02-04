@@ -35,46 +35,42 @@ public class MainActivity extends AppCompatActivity {
 
 	private WebView webView;
 	private WebSettings webSettings;
-
 	private DrawerLayout drawer_layout;
 	private NavigationView left_nav, right_nav;
-
-	private boolean
-	DesktopMode = false, 
-	ForceDark = true,
-	JavaScriptEnabled = true,
-	BuiltInZoomControls = true,
-	DisplayZoomControls = false,
-	JavaScriptCanOpenWindowsAutomatically = true,
-	LoadsImagesAutomatically = true,
-	LoadWithOverviewMode = true,
-	UseWideViewPort = true,
-	AllowContentAccess = true,
-	DomStorageEnabled = true;
-
-	private String
-	git = "https://github.com/", 
-	user = "ShivaShirsath",
-	tab = "?tab=",
-	link = git + user, 
-	CM;
-
 	private ValueCallback<Uri> UM;
 	private ValueCallback<Uri[]> UMA;
 	private long backPressedTime = 0;
 	private int focus = 0;
-
+	private boolean
+		DesktopMode = false, 
+		ForceDark = true,
+		JavaScriptEnabled = true,
+		BuiltInZoomControls = true,
+		DisplayZoomControls = false,
+		JavaScriptCanOpenWindowsAutomatically = true,
+		LoadsImagesAutomatically = true,
+		LoadWithOverviewMode = true,
+		UseWideViewPort = true,
+		AllowContentAccess = true,
+		DomStorageEnabled = true
+	;
+	private String
+		git = "https://github.com/", 
+		user = "ShivaShirsath",
+		tab = "?tab=",
+		link = git + user, 
+		CM
+	;
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		try {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 			setContentView(R.layout.activity_main);
 			webView = findViewById(R.id.WebView);
-			webSettings = webView.getSettings();
-
+			webSettings = webView.getSettings();	
+			Uri data = getIntent().getData();
+			link = (data != null ? data.toString() : link);
 			loadAll();
 		} catch (Exception e) {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null 
 			|| !
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
-			) {
+		) {
 			showDialog("No Internet Connection !");
 		} else if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
 			setDrawers();
@@ -96,44 +92,26 @@ public class MainActivity extends AppCompatActivity {
 		drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		left_nav = (NavigationView) findViewById(R.id.left_nav);
 		right_nav = (NavigationView) findViewById(R.id.right_nav);
-
 		left_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-				@Override
-				public boolean onNavigationItemSelected(MenuItem item) {
+				@Override public boolean onNavigationItemSelected(MenuItem item) {
 					if ((!item.getTitle().equals(user)) && item.getItemId() == R.id.item_user)
 						item.setTitle(user);
 					switch (item.getItemId()) {
-						case R.id.item_user:
-							link = git + item.getTitle();
-							break;
-						case R.id.item_newRepo:
-							link = git + String.valueOf(item.getTitle()).toLowerCase();
-							break;
-						case R.id.item_repo:
-							link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
-							break;
-						case R.id.item_project:
-							link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
-							break;
-						case R.id.item_package:
-							link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
-							break;
-						case R.id.item_settings:
-							link = git + String.valueOf(item.getTitle()).toLowerCase();
-							break;
-						default:
-							Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+						case R.id.item_user: 		link = git + item.getTitle(); break;
+						case R.id.item_newRepo: 	link = git + String.valueOf(item.getTitle()).toLowerCase(); break;
+						case R.id.item_repo: 		link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
+						case R.id.item_project: 	link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
+						case R.id.item_package: 	link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
+						case R.id.item_settings: 	link = git + String.valueOf(item.getTitle()).toLowerCase(); break;
+						default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
 					}
 					refreshWebView(link);
-
 					drawer_layout.closeDrawers();
 					return true;
 				}
 			});
-
 		right_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-				@Override
-				public boolean onNavigationItemSelected(MenuItem item) {
+				@Override public boolean onNavigationItemSelected(MenuItem item) {
 					switch (item.getItemId()) {
 						case R.id.item_desktop:
 							DesktopMode = ! DesktopMode;
@@ -143,33 +121,28 @@ public class MainActivity extends AppCompatActivity {
 							ForceDark = ! ForceDark;
 							item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
 							break;
-						case R.id.item_open_in_chrome:
-							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome"));
+						case R.id.item_open_in_chrome: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome")); break;
+						case R.id.item_reload: webView.reload(); break;
+						case R.id.item_help: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome")); break;
+						case R.id.item_vscode:
+							if (item.getTitle().toString().contains("Github")) {
+								item.setTitle("Open VS code");
+								webView.loadUrl(webView.getUrl().toString().replace(".dev", ".com"));
+							} else {
+								item.setTitle("Open Github");
+								webView.loadUrl(webView.getUrl().toString().replace(".com", ".dev"));
+							}
 							break;
-						case R.id.item_reload:
-							webView.reload();
-							break;
-						case R.id.item_help:
-							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome"));
-							break;
-						case R.id.item_agent:
-							Toast.makeText(MainActivity.this, webView.getSettings().getUserAgentString(), Toast.LENGTH_LONG).show();
-							break;
-						default:
-							Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+						default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
 					}
 					refreshWebView(webView.getUrl());
-
 					drawer_layout.closeDrawers();
 					return true;
 				}
 			});
 	}
-
 	private void refreshWebView(String url) {
-
-		webSettings.setJavaScriptEnabled(JavaScriptEnabled);
-		
+		webSettings.setJavaScriptEnabled(JavaScriptEnabled);	
 		webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
 		//webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
 		/*webSettings.setUserAgentString(
@@ -188,17 +161,13 @@ public class MainActivity extends AppCompatActivity {
         //webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(BuiltInZoomControls);
 		webSettings.setDisplayZoomControls(DisplayZoomControls);
-
 		webSettings.setJavaScriptCanOpenWindowsAutomatically(JavaScriptCanOpenWindowsAutomatically);
 		webSettings.setLoadsImagesAutomatically(LoadsImagesAutomatically);
-
 		webView.setInitialScale(1);
 		webSettings.setLoadWithOverviewMode(LoadWithOverviewMode);
 		webSettings.setUseWideViewPort(UseWideViewPort);
-
 		webSettings.setAllowContentAccess(AllowContentAccess);
 		webSettings.setDomStorageEnabled(DomStorageEnabled);
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
 				(getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES 
@@ -213,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
 		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
-
 		webView.setWebViewClient(new WebViewClient() {
 				@Override public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 					Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
@@ -231,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
 					return true;
 				}
 			});
-
 		webView.setWebChromeClient(new WebChromeClient() {
 				//For Android 3.0+
 				public void openFileChooser(ValueCallback<Uri> uploadMsg) {
@@ -286,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
 			});
 		webView.loadUrl(url);
 	}
-
 	@Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -352,7 +318,6 @@ public class MainActivity extends AppCompatActivity {
 		Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ?"" : " Back") : "Bye…" , Toast.LENGTH_LONG).show();
 		focus ++;
 	}
-
 	public Intent fileChooser(ValueCallback<Uri> uploadMsg) {
 		UM = uploadMsg;
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -362,7 +327,6 @@ public class MainActivity extends AppCompatActivity {
 			MainActivity.this.startActivityForResult(Intent.createChooser(intent, "File Chooser"), 1);
 		return intent;
 	}
-
 	public void setDownload(String url) {
 		((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(
 			new DownloadManager.Request(Uri.parse(url))
