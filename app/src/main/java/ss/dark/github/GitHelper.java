@@ -1,13 +1,13 @@
 package ss.dark.github;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.widget.Toast;/*
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.Volley;*/
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,7 +20,7 @@ public class GitHelper {
 
 	}
 	public static JSONObject getJSONobject(String user) {
-		Volley.newRequestQueue(context).add(
+		/*Volley.newRequestQueue(context).add(
 			new JsonObjectRequest(
 				Request.Method.GET,
 				"https://api.github.com/users/" + user,
@@ -42,11 +42,11 @@ public class GitHelper {
 					}
 				}
 			)
-		);
+		);*/
 		return obj;
 	}
 	public static JSONArray getJSONarray(String url) {
-		Volley.newRequestQueue(context).add(
+		/*Volley.newRequestQueue(context).add(
 			new JsonArrayRequest(
 				Request.Method.GET,
 				url,
@@ -68,7 +68,7 @@ public class GitHelper {
 					}
 				}
 			)
-		);
+		);*/
 		return array ;
 	}
 }
