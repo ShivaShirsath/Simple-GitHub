@@ -25,7 +25,7 @@ jobs:
           cache: gradle
       - name: Build APK
         run: |
-         gradle wrapper --gradle-version 4.2.0
+         gradle wrapper --gradle-version 7.3.3
          bash ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v2
