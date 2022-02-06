@@ -27,6 +27,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />	
 			</intent-filter>
 			
+		<!-- Deep Links -->
 			<intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -52,8 +53,9 @@
 				<data android:scheme="https" />
 				<data android:host="*.github.io" />
 				<data android:pathPattern="/.*" />
-			</intent-filter>
-			
+			</intent-filter>	
+		<!-- Deep Links -->
+		
 		</activity> 
 		
         <meta-data android:name="android.max_aspect" android:value="4.0" />
