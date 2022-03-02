@@ -20,8 +20,8 @@ android {
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:27.1.1'
-	compile 'com.android.support:drawerlayout:27.1.1'
-	compile 'com.android.support:design:27.1.1'
+	compile 'com.android.support:appcompat-v7'
+	compile 'com.android.support:drawerlayout'
+	compile 'com.android.support:design'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

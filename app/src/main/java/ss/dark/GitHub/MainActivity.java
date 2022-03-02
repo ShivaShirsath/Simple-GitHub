@@ -18,6 +18,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -42,24 +43,24 @@ public class MainActivity extends AppCompatActivity {
 	private long backPressedTime = 0;
 	private int focus = 0;
 	private boolean
-		DesktopMode = false, 
-		ForceDark = true,
-		JavaScriptEnabled = true,
-		BuiltInZoomControls = true,
-		DisplayZoomControls = false,
-		JavaScriptCanOpenWindowsAutomatically = true,
-		LoadsImagesAutomatically = true,
-		LoadWithOverviewMode = true,
-		UseWideViewPort = true,
-		AllowContentAccess = true,
-		DomStorageEnabled = true
+    DesktopMode = false, 
+    ForceDark = true,
+    JavaScriptEnabled = true,
+    BuiltInZoomControls = true,
+    DisplayZoomControls = false,
+    JavaScriptCanOpenWindowsAutomatically = true,
+    LoadsImagesAutomatically = true,
+    LoadWithOverviewMode = true,
+    UseWideViewPort = true,
+    AllowContentAccess = true,
+    DomStorageEnabled = true
 	;
 	private String
-		git = "https://github.com/", 
-		user = "ShivaShirsath",
-		tab = "?tab=",
-		link = git + user, 
-		CM
+    git = "https://github.com/", 
+    user = "ShivaShirsath",
+    tab = "?tab=",
+    link = git + user, 
+    CM
 	;
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			setContentView(R.layout.activity_main);
 			webView = findViewById(R.id.WebView);
-			webSettings = webView.getSettings();	
+			webSettings = webView.getSettings();
+            registerForContextMenu(webView);
 			Uri data = getIntent().getData();
 			link = (data != null ? data.toString() : link);
 			loadAll();
@@ -76,12 +78,59 @@ public class MainActivity extends AppCompatActivity {
 			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
+    public void itemOp(MenuItem item, String url) {
+        switch (item.getItemId()) {
+            case R.id.item_desktop:
+                DesktopMode = ! DesktopMode;
+                item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
+                break;
+            case R.id.item_dark:
+                ForceDark = ! ForceDark;
+                item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
+                break;
+            case R.id.item_open_in_chrome: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)).setPackage("com.android.chrome")); break;
+            case R.id.item_reload: webView.reload(); break;
+            case R.id.item_help: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome")); break;
+            case R.id.item_vscode:
+                if (item.getTitle().toString().contains("Github")) {
+                    item.setTitle("Open VS code");
+                    webView.loadUrl(url.replace(".dev", ".com"));
+                } else {
+                    item.setTitle("Open Github");
+                    webView.loadUrl(url.replace(".com", ".dev"));
+                }
+                break;
+            case R.id.item_download:
+                setDownload(url);
+                break;
+            default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        final WebView.HitTestResult result = webView.getHitTestResult();
+
+        if (result.getType() != WebView.HitTestResult.UNKNOWN_TYPE) {
+            menu.setHeaderTitle(result.getExtra());
+
+            MenuItem.OnMenuItemClickListener menuListener = new MenuItem.OnMenuItemClickListener() {
+                @Override public boolean onMenuItemClick(MenuItem item) {
+                    itemOp(item, result.getExtra());             
+                    return false;
+                }
+            };
+            menu.add(0, R.id.item_open_in_chrome, 0, "Open in Chrome").setOnMenuItemClickListener(menuListener);
+            if (result.getExtra().contains(user)) menu.add(0, R.id.item_vscode, 0, "Code").setOnMenuItemClickListener(menuListener);
+            menu.add(0, R.id.item_download, 0, "⇩").setOnMenuItemClickListener(menuListener);
+        }
+    }
 	private void loadAll() {
 		if (
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null 
 			|| !
 			((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
-		) {
+            ) {
 			showDialog("No Internet Connection !");
 		} else if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
 			setDrawers();
@@ -112,35 +161,14 @@ public class MainActivity extends AppCompatActivity {
 			});
 		right_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 				@Override public boolean onNavigationItemSelected(MenuItem item) {
-					switch (item.getItemId()) {
-						case R.id.item_desktop:
-							DesktopMode = ! DesktopMode;
-							item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
-							break;
-						case R.id.item_dark:
-							ForceDark = ! ForceDark;
-							item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
-							break;
-						case R.id.item_open_in_chrome: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())).setPackage("com.android.chrome")); break;
-						case R.id.item_reload: webView.reload(); break;
-						case R.id.item_help: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome")); break;
-						case R.id.item_vscode:
-							if (item.getTitle().toString().contains("Github")) {
-								item.setTitle("Open VS code");
-								webView.loadUrl(webView.getUrl().toString().replace(".dev", ".com"));
-							} else {
-								item.setTitle("Open Github");
-								webView.loadUrl(webView.getUrl().toString().replace(".com", ".dev"));
-							}
-							break;
-						default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
-					}
+					itemOp(item, webView.getUrl());
 					refreshWebView(webView.getUrl());
 					drawer_layout.closeDrawers();
 					return true;
 				}
 			});
 	}
+
 	private void refreshWebView(String url) {
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);	
 		webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
@@ -163,11 +191,15 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDisplayZoomControls(DisplayZoomControls);
 		webSettings.setJavaScriptCanOpenWindowsAutomatically(JavaScriptCanOpenWindowsAutomatically);
 		webSettings.setLoadsImagesAutomatically(LoadsImagesAutomatically);
-		webView.setInitialScale(1);
+		webView.setInitialScale(0);
 		webSettings.setLoadWithOverviewMode(LoadWithOverviewMode);
 		webSettings.setUseWideViewPort(UseWideViewPort);
 		webSettings.setAllowContentAccess(AllowContentAccess);
 		webSettings.setDomStorageEnabled(DomStorageEnabled);
+        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+        webSettings.setTextZoom(100);
+        webSettings.setSupportMultipleWindows(true);
+        //webView.setLongClickable(true);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
 				(getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES 
@@ -188,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 				@Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
 					if (url.contains("github")) {
-						if (url.contains("raw")) {
+						if (url.contains("releases") && (url.contains("download"))) {
 							setDownload(url);
 						} else {
 							view.loadUrl(url);
