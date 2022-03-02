@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        
         <item
             android:id="@+id/item_user"
             android:title="@string/user_name" />
@@ -18,6 +19,48 @@
         <item
             android:id="@+id/item_package"
             android:title="Packages" />
+
+        <item
+            android:id="@+id/item_stars"
+            android:title="Stars" />
+    </group>
+    
+    <group android:checkableBehavior="single"> 
+        
+        <item
+            android:id="@+id/item_followers"
+            android:title="Followers" />
+
+        <item
+            android:id="@+id/item_following"
+            android:title="Following" />
+    </group>
+    
+    <group android:checkableBehavior="single">
+        
+        <item
+            android:id="@+id/item_dashboard"
+            android:title="Dashboard" />
+
+        <item
+            android:id="@+id/item_pulls"
+            android:title="Pulls" />
+
+        <item
+            android:id="@+id/item_issues"
+            android:title="Issues" />
+
+        <item
+            android:id="@+id/item_marketplace"
+            android:title="Marketplace" />
+
+        <item
+            android:id="@+id/item_explore"
+            android:title="Explore" />
+
+        <item
+            android:id="@+id/item_codespaces"
+            android:title="Codespaces" />
 
     </group>
 

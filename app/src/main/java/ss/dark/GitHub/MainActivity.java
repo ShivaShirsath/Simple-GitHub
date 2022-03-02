@@ -146,17 +146,32 @@ public class MainActivity extends AppCompatActivity {
 					if ((!item.getTitle().equals(user)) && item.getItemId() == R.id.item_user)
 						item.setTitle(user);
 					switch (item.getItemId()) {
-						case R.id.item_user: 		link = git + item.getTitle(); break;
-						case R.id.item_newRepo: 	link = git + String.valueOf(item.getTitle()).toLowerCase(); break;
-						case R.id.item_repo: 		link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
-						case R.id.item_project: 	link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
-						case R.id.item_package: 	link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
-						case R.id.item_settings: 	link = git + String.valueOf(item.getTitle()).toLowerCase(); break;
+						case R.id.item_user:
+						case R.id.item_newRepo: 	
+                        case R.id.item_settings: 
+                        case R.id.item_dashboard: 
+                        case R.id.item_pulls:
+                        case R.id.item_issues:
+                        case R.id.item_marketplace:
+                        case R.id.item_explore:
+                        case R.id.item_codespaces:
+                            link = git + item.getTitle().toString().toLowerCase(); 
+                        break;
+                            
+						case R.id.item_repo: 		
+						case R.id.item_project: 	
+						case R.id.item_package: 	
+                        case R.id.item_stars:
+                        case R.id.item_followers:
+                        case R.id.item_following: 
+                            link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); 
+                        break;
+						
 						default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
 					}
 					refreshWebView(link);
 					drawer_layout.closeDrawers();
-					return true;
+					return false;
 				}
 			});
 		right_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -164,28 +179,13 @@ public class MainActivity extends AppCompatActivity {
 					itemOp(item, webView.getUrl());
 					refreshWebView(webView.getUrl());
 					drawer_layout.closeDrawers();
-					return true;
+					return false;
 				}
 			});
 	}
-
 	private void refreshWebView(String url) {
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);	
 		webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
-		//webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36");
-		/*webSettings.setUserAgentString(
-		 webSettings.getUserAgentString()
-		 .replace(
-		 webSettings.getUserAgentString()
-		 .substring(
-		 webSettings.getUserAgentString().indexOf("("),
-		 webSettings.getUserAgentString().indexOf(")") + 1
-		 ),
-		 DesktopMode 
-		 ? "(Macintosh; Intel Mac OS X 11_2_3)" /*(X11; Linux x86_64)*//*(Windows NT 10.0; Win64; x64)*
-		 : "(iPhone; CPU iPhone OS 14_4 like Mac OS X)"
-		 )
-		 );*/ // For Desktop side toggle
         //webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(BuiltInZoomControls);
 		webSettings.setDisplayZoomControls(DisplayZoomControls);
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
         webSettings.setTextZoom(100);
         webSettings.setSupportMultipleWindows(true);
-        //webView.setLongClickable(true);
+        webView.setLongClickable(true);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			webSettings.setForceDark(
 				(getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES 
