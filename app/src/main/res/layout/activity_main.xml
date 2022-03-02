@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        
+        app:headerLayout="@layout/nav_header_right"
         android:fitsSystemWindows="true"
         app:menu="@menu/right" />
 	<!-- android:background="#00000000" -->

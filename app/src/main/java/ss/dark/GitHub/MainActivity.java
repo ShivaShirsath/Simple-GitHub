@@ -31,6 +31,9 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 import java.io.File;
 import java.util.Date;
+import android.widget.TextView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -182,7 +185,34 @@ public class MainActivity extends AppCompatActivity {
 					return false;
 				}
 			});
+            
+        View rightHeader = right_nav.getHeaderView(0);
+        
+        progressSetter( ((SeekBar)rightHeader.findViewById(R.id.webtextzoom)), ((TextView) rightHeader.findViewById(R.id.webtextzoomtv)) );
+        
+        progressSetter( ((SeekBar)rightHeader.findViewById(R.id.webtextsize)),  ((TextView) rightHeader.findViewById(R.id.webtextsizetv)) );         
 	}
+    public void progressSetter(final SeekBar bar, final TextView tv){
+        bar.setOnSeekBarChangeListener(
+            new OnSeekBarChangeListener() {       
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}       
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {     
+                    tv.setText(""+ (progress+1));
+                    if (bar.getId() == R.id.webtextsize) {
+                       switch(progress){
+                           case 0: webSettings.setTextSize(WebSettings.TextSize.SMALLEST); break; 
+                           case 1: webSettings.setTextSize(WebSettings.TextSize.SMALLER); break; 
+                           case 2: webSettings.setTextSize(WebSettings.TextSize.NORMAL); break; 
+                           case 3: webSettings.setTextSize(WebSettings.TextSize.LARGEST); break; 
+                           case 4: webSettings.setTextSize(WebSettings.TextSize.LARGER); break; 
+                           default: Toast.makeText(MainActivity.this, "Invalid Size", Toast.LENGTH_SHORT).show();
+                       } 
+                    }
+                    if (bar.getId() == R.id.webtextzoom) webSettings.setTextZoom(progress);
+                }       
+            });
+    }
 	private void refreshWebView(String url) {
 		webSettings.setJavaScriptEnabled(JavaScriptEnabled);	
 		webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
@@ -196,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setUseWideViewPort(UseWideViewPort);
 		webSettings.setAllowContentAccess(AllowContentAccess);
 		webSettings.setDomStorageEnabled(DomStorageEnabled);
-        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
-        webSettings.setTextZoom(100);
         webSettings.setSupportMultipleWindows(true);
         webView.setLongClickable(true);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
