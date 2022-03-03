@@ -4,7 +4,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
