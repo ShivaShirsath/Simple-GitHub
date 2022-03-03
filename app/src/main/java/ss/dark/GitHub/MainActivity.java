@@ -37,7 +37,6 @@ import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
