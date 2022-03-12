@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_download:
                 setDownload(url);
                 break;
+            case R.id.item_send:
+                startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, url).putExtra(Intent.EXTRA_TEXT, url).setType("text/*"), "Share!"));
+                break;
             default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
         }
     }
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
             menu.add(0, R.id.item_open_in_chrome, 0, "Open in Chrome").setOnMenuItemClickListener(menuListener);
             if (result.getExtra().contains(user)) menu.add(0, R.id.item_vscode, 0, "Code").setOnMenuItemClickListener(menuListener);
             menu.add(0, R.id.item_download, 0, "⇩").setOnMenuItemClickListener(menuListener);
+            menu.add(0, R.id.item_send, 0, "➣").setOnMenuItemClickListener(menuListener);
         }
     }
     private void loadAll() {
@@ -237,12 +241,8 @@ public class MainActivity extends AppCompatActivity {
             );
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.setMixedContentMode(0);
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webView.setWebViewClient(new WebViewClient() {
                 @Override public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                     Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
@@ -261,19 +261,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         webView.setWebChromeClient(new WebChromeClient() {
-                //For Android 3.0+
-                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-                    fileChooser(uploadMsg);
+                public Intent openFileChooser(ValueCallback<Uri> uploadMsg) {
+                    UM = uploadMsg;
+                    Intent intent = Intent.createChooser(new Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*"), "File Chooser");
+                    if (UM != null)
+                        MainActivity.this.startActivityForResult(intent, 1);
+                    return intent;
                 }
-                // For Android 3.0+, above method not supported in some android 3+ versions, in such case we use this
                 public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
                     fileChooser(uploadMsg);
                 }
-                //For Android 4.1+
                 public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                     fileChooser(uploadMsg);
                 }
-                //For Android 5.0+
                 public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                     if (UMA != null) {
                         UMA.onReceiveValue(null);
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                         intentArray = new Intent[0];
                     }
                     Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-                    chooserIntent.putExtra(Intent.EXTRA_INTENT, fileChooser(null));
+                    chooserIntent.putExtra(Intent.EXTRA_INTENT, openFileChooser(null));
                     chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an Action");
                     chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
                     startActivityForResult(chooserIntent, 1);
@@ -378,15 +378,6 @@ public class MainActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ?"" : " Back") : "Bye…" , Toast.LENGTH_LONG).show();
         focus ++;
-    }
-    public Intent fileChooser(ValueCallback<Uri> uploadMsg) {
-        UM = uploadMsg;
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        if (uploadMsg != null)
-            MainActivity.this.startActivityForResult(Intent.createChooser(intent, "File Chooser"), 1);
-        return intent;
     }
     public void setDownload(String url) {
         ((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(
