@@ -269,10 +269,10 @@ public class MainActivity extends AppCompatActivity {
                     return intent;
                 }
                 public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-                    fileChooser(uploadMsg);
+                    openFileChooser(uploadMsg);
                 }
                 public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-                    fileChooser(uploadMsg);
+                    openFileChooser(uploadMsg);
                 }
                 public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                     if (UMA != null) {
