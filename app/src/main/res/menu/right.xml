@@ -12,29 +12,29 @@
     <item
         android:id="@+id/item_open_in_chrome"
         android:title="Open in Chrome" />
-	
-	<item
+
+    <item
         android:id="@+id/item_reload"
         android:title="Reload" />
 
-	<item
+    <item
         android:id="@+id/item_help"
         android:title="Help" />
-	
-	<item
+
+    <item
         android:id="@+id/item_vscode"
         android:title="Open VS code" />
 
     <item
         android:id="@+id/item_download"
         android:title="⇩" />
-    
+
     <item
         android:id="@+id/item_send"
         android:title="➣" />
-    
+
     <item
         android:id="@+id/item_refresh"
         android:title="`" />
-    
+
 </menu>

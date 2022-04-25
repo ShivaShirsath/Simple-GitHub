@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - OnAndroid
-      
+
 jobs:
   apk:
-    name: Generate APK 
+    name: Generate APK
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,13 +19,13 @@ jobs:
           cache: gradle
       - name: Build APK
         run: |
-         gradle wrapper
-         bash ./gradlew assembleDebug --stacktrace
+          gradle wrapper
+          bash ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: apk
-          path: app/build/outputs/apk/debug/app-debug.apk 
+          path: app/build/outputs/apk/debug/app-debug.apk
   release:
     name: Release APK
     needs: apk
@@ -35,12 +35,12 @@ jobs:
       - name: Download APK from build
         uses: actions/download-artifact@v2
         with:
-          name: apk  
+          name: apk
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.commits[0].message }}
           release_name: Release ${{ github.event.commits[0].message }}

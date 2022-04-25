@@ -1,76 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:padding="2dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="2dp">
 
-	<View
-		android:layout_width="match_parent"
-		android:layout_height="25dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Text Size"
-		android:padding="2.5dp"
-		android:gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2.5dp"
+        android:text="Text Size" />
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="2.5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2.5dp">
 
-		<TextView
+        <TextView
             android:id="@+id/webtextzoomtv"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="50"
-			android:gravity="center"
-			android:padding="10dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="50" />
 
-		<SeekBar
-			android:id="@+id/webtextzoom"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:max="99"
-			android:progress="50"/>
+        <SeekBar
+            android:id="@+id/webtextzoom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:max="99"
+            android:progress="50" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Text Zoom"
-		android:padding="2.5dp"
-		android:gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2.5dp"
+        android:text="Text Zoom" />
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="2.5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2.5dp">
 
-		<TextView
+        <TextView
             android:id="@+id/webtextsizetv"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="3"
-			android:gravity="center"
-			android:padding="10dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="3" />
 
-		<SeekBar
-			android:id="@+id/webtextsize"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:max="4"
-			android:progress="2"/>
+        <SeekBar
+            android:id="@+id/webtextsize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:max="4"
+            android:progress="2" />
 
-	</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        
+
         <item
             android:id="@+id/item_user"
             android:title="@string/user_name" />
@@ -24,9 +24,9 @@
             android:id="@+id/item_stars"
             android:title="Stars" />
     </group>
-    
-    <group android:checkableBehavior="single"> 
-        
+
+    <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/item_followers"
             android:title="Followers" />
@@ -35,9 +35,9 @@
             android:id="@+id/item_following"
             android:title="Following" />
     </group>
-    
+
     <group android:checkableBehavior="single">
-        
+
         <item
             android:id="@+id/item_dashboard"
             android:title="Dashboard" />
