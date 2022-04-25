@@ -32,4 +32,9 @@
     <item
         android:id="@+id/item_send"
         android:title="➣" />
+    
+    <item
+        android:id="@+id/item_refresh"
+        android:title="`" />
+    
 </menu>

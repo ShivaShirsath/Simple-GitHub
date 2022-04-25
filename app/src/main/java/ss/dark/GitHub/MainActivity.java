@@ -28,12 +28,16 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
-import java.io.File;
-import java.util.Date;
-import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
     link = git + user, 
     CM
 	;
+    private OutputStreamWriter Wfile;
+    private InputStream inputStream;
+    private StringBuilder stringBuilder;
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
@@ -72,13 +79,14 @@ public class MainActivity extends AppCompatActivity {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			setContentView(R.layout.activity_main);
 			webView = findViewById(R.id.WebView);
-			webSettings = webView.getSettings();
+			webSettings = webView.getSettings();        
             registerForContextMenu(webView);
 			Uri data = getIntent().getData();
+            link = readFromFile(getApplicationContext()) != null ? readFromFile(getApplicationContext()) : link;
 			link = (data != null ? data.toString() : link);
 			loadAll();
 		} catch (Exception e) {
-			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
     public void itemOp(MenuItem item, String url) {
@@ -108,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.item_send:
                 startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, url).putExtra(Intent.EXTRA_TEXT, url).setType("text/*"), "Share!"));
+                break;
+            case R.id.item_refresh:
+                writeToFile(getApplicationContext(), git + user);
                 break;
             default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
         }
@@ -163,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.item_explore:
                         case R.id.item_codespaces:
                             link = git + item.getTitle().toString().toLowerCase(); 
-                        break;
-                            
+                            break;
+
 						case R.id.item_repo: 		
 						case R.id.item_project: 	
 						case R.id.item_package: 	
@@ -172,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.item_followers:
                         case R.id.item_following: 
                             link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); 
-                        break;
-						
+                            break;
+
 						default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
 					}
 					refreshWebView(link);
@@ -189,29 +200,29 @@ public class MainActivity extends AppCompatActivity {
 					return false;
 				}
 			});
-            
+
         View rightHeader = right_nav.getHeaderView(0);
-        
-        progressSetter( ((SeekBar)rightHeader.findViewById(R.id.webtextzoom)), ((TextView) rightHeader.findViewById(R.id.webtextzoomtv)) );
-        
-        progressSetter( ((SeekBar)rightHeader.findViewById(R.id.webtextsize)),  ((TextView) rightHeader.findViewById(R.id.webtextsizetv)) );         
+
+        progressSetter(((SeekBar)rightHeader.findViewById(R.id.webtextzoom)), ((TextView) rightHeader.findViewById(R.id.webtextzoomtv)));
+
+        progressSetter(((SeekBar)rightHeader.findViewById(R.id.webtextsize)),  ((TextView) rightHeader.findViewById(R.id.webtextsizetv)));         
 	}
-    public void progressSetter(final SeekBar bar, final TextView tv){
+    public void progressSetter(final SeekBar bar, final TextView tv) {
         bar.setOnSeekBarChangeListener(
             new OnSeekBarChangeListener() {       
                 @Override public void onStopTrackingTouch(SeekBar seekBar) {}       
                 @Override public void onStartTrackingTouch(SeekBar seekBar) {}
                 @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {     
-                    tv.setText(""+ (progress+1));
+                    tv.setText("" + (progress + 1));
                     if (bar.getId() == R.id.webtextsize) {
-                       switch(progress){
-                           case 0: webSettings.setTextSize(WebSettings.TextSize.SMALLEST); break; 
-                           case 1: webSettings.setTextSize(WebSettings.TextSize.SMALLER); break; 
-                           case 2: webSettings.setTextSize(WebSettings.TextSize.NORMAL); break; 
-                           case 3: webSettings.setTextSize(WebSettings.TextSize.LARGEST); break; 
-                           case 4: webSettings.setTextSize(WebSettings.TextSize.LARGER); break; 
-                           default: Toast.makeText(MainActivity.this, "Invalid Size", Toast.LENGTH_SHORT).show();
-                       } 
+                        switch (progress) {
+                            case 0: webSettings.setTextSize(WebSettings.TextSize.SMALLEST); break; 
+                            case 1: webSettings.setTextSize(WebSettings.TextSize.SMALLER); break; 
+                            case 2: webSettings.setTextSize(WebSettings.TextSize.NORMAL); break; 
+                            case 3: webSettings.setTextSize(WebSettings.TextSize.LARGEST); break; 
+                            case 4: webSettings.setTextSize(WebSettings.TextSize.LARGER); break; 
+                            default: Toast.makeText(MainActivity.this, "Invalid Size", Toast.LENGTH_SHORT).show();
+                        } 
                     }
                     if (bar.getId() == R.id.webtextzoom) webSettings.setTextZoom(progress);
                 }       
@@ -258,6 +269,10 @@ public class MainActivity extends AppCompatActivity {
 					}
 					return true;
 				}
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);          
+                }
 			});
 		webView.setWebChromeClient(new WebChromeClient() {
                 public Intent openFileChooser(ValueCallback<Uri> uploadMsg) {
@@ -288,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
 							photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
 							takePictureIntent.putExtra("PhotoPath", CM);
 						} catch (Exception e) {
-							Toast.makeText(MainActivity.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+							Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 						if (photoFile != null) {
 							CM = "file:" + photoFile.getAbsolutePath();
@@ -355,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
 			finish();
 			return;
 		} else {
-			Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MainActivity.this, "Press back again to exit", Toast.LENGTH_SHORT).show();
 		}
 		backPressedTime = System.currentTimeMillis();
 	}
@@ -373,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	@Override public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ? "" : " Back") : "Bye…" , Toast.LENGTH_LONG).show();
+		Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ? "" : " Back") : "Bye…", Toast.LENGTH_SHORT).show();
 		focus ++;
 	}
 	public void setDownload(String url) {
@@ -389,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
 				url.substring(url.lastIndexOf("/") + 1) // This is File Name
 			)
 		);
-		Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
+		Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
 	}
 	public void showDialog(String title) {
 		AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
@@ -408,4 +423,31 @@ public class MainActivity extends AppCompatActivity {
 			}).create();
 		dialog.show();
 	}
+    private void writeToFile(Context context, String data) {
+        try {
+            Wfile = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));   
+            Wfile.write(data);
+            Wfile.close();
+            Toast.makeText(context, data == "" ? "Empty" : "See You Soon 😉", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        } 
+    }
+    private String readFromFile(Context context) {
+        try {
+            inputStream = context.openFileInput("config.txt");
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(new BufferedReader(new InputStreamReader(inputStream)).readLine());
+            inputStream.close();
+            return stringBuilder.toString();
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            return "";
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        writeToFile(getApplicationContext(), webView.getUrl());
+        super.onDestroy();
+    }
 }
