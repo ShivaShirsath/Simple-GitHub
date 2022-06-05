@@ -14,14 +14,15 @@
         <!-- Customize your theme here. -->
         
         <item name="android:forceDarkAllowed">true</item>
-		<item name="android:isLightTheme">true</item>
-		
-		<item name="windowActionBar">false</item>
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:windowFullscreen">true</item>
-		
-		<!-- to hide white screen in start of window -->
-		<item name="android:windowIsTranslucent">true</item>
+	<item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+	<item name="android:isLightTheme">true</item>
+	    
+	<item name="windowActionBar">false</item>
+	<item name="android:windowNoTitle">true</item>
+	<item name="android:windowFullscreen">true</item>
+	    
+	<!-- to hide white screen in start of window -->
+	<item name="android:windowIsTranslucent">true</item>
 		
     </style>
     
