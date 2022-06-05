@@ -85,8 +85,17 @@ public class MainActivity extends AppCompatActivity {
             link = (link.contains("null") ? git + user : link);
             loadAll();
         } catch (Exception e) {
+            if(e.getMessage().contains("file")) {
+                writeToFile(getApplicationContext(), git + user);
+                restart();
+            }
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+    public void restart() {
+        Toast.makeText(getApplicationContext(), "ReStarted", Toast.LENGTH_SHORT).show();
+        startActivity(getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // Start this new Activity
+        finish(); // Stop this old Activity
     }
     private void hideSystemUI() {
         View decorView = getWindow().getDecorView();
