@@ -86,7 +86,10 @@ public class MainActivity extends AppCompatActivity {
             registerForContextMenu(webView);
             Uri data = getIntent().getData();
             link = readFromFile(getApplicationContext()) != null ? readFromFile(getApplicationContext()) : link;
+            Toast.makeText(MainActivity.this, "File Contains : " + readFromFile(getApplicationContext()), Toast.LENGTH_SHORT).show();
             link = (data != null ? data.toString() : link);
+            link = (link.contains("null") ? git + user : link);
+            Toast.makeText(MainActivity.this, "Link Contains : " + link , Toast.LENGTH_SHORT).show();
             loadAll();
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
