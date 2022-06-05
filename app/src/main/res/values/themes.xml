@@ -19,7 +19,7 @@
 	    
 	<item name="windowActionBar">false</item>
 	<item name="android:windowNoTitle">true</item>
-	<item name="android:windowFullscreen">true</item>
+	<item name="android:windowFullscreen">false</item>
 	    
 	<!-- to hide white screen in start of window -->
 	<item name="android:windowIsTranslucent">true</item>
