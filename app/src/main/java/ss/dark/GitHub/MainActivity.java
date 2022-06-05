@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            hideSystemUI();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { 
+                getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES; 
+            }
             setContentView(R.layout.activity_main);
             webView = findViewById(R.id.WebView);
             webSettings = webView.getSettings();
@@ -88,7 +92,17 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+private void hideSystemUI() {
+    View decorView = getWindow().getDecorView();
+    decorView.setSystemUiVisibility(
+        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
+    }
     public void itemOp(MenuItem item, String url) {
         switch (item.getItemId()) {
             case R.id.item_desktop:
