@@ -74,37 +74,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            hideSystemUI();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { 
-                getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES; 
-            }
+            //hideSystemUI();
             setContentView(R.layout.activity_main);
             webView = findViewById(R.id.WebView);
             webSettings = webView.getSettings();
             registerForContextMenu(webView);
             Uri data = getIntent().getData();
             link = readFromFile(getApplicationContext()) != null ? readFromFile(getApplicationContext()) : link;
-            Toast.makeText(MainActivity.this, "File Contains : " + readFromFile(getApplicationContext()), Toast.LENGTH_SHORT).show();
             link = (data != null ? data.toString() : link);
             link = (link.contains("null") ? git + user : link);
-            Toast.makeText(MainActivity.this, "Link Contains : " + link , Toast.LENGTH_SHORT).show();
             loadAll();
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-private void hideSystemUI() {
-    View decorView = getWindow().getDecorView();
-    decorView.setSystemUiVisibility(
-        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN);
-
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_FULLSCREEN
+        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { 
+            getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES; 
+        }
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);          
     }
     public void itemOp(MenuItem item, String url) {
         switch (item.getItemId()) {
