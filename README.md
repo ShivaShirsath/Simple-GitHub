@@ -1,5 +1,5 @@
 <h1 align=center> Dark Github </h1>
-<h2 align=center> WebView Android )</h2>
+<h2 align=center> WebView Android </h2>
 
 <h1 align=center>
     <a href=../../actions/workflows/android.yml>
