@@ -513,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Rel⟳ad", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        loadAll();
+                        loadAll(webView.getUrl());
                         dialog.dismiss();
                     }
                 }).create();
