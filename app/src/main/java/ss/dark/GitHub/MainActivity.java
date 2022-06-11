@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             link = readFromFile(getApplicationContext()) != null ? readFromFile(getApplicationContext()) : link;
             link = (data != null ? data.toString() : link);
             link = (link.contains("null") ? git + user : link);
-            loadAll();
+            loadAll(link);
         } catch (Exception e) {
             if(e.getMessage().contains("file")) {
                 writeToFile(getApplicationContext(), git + user);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    loadAll();
+                    loadAll(link);
                     swipe.setRefreshing(false);
                 }
             }
@@ -192,11 +192,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadAll() {
+    private void loadAll(String link) {
         if (
-                ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null
-                        || !
-                        ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
+            ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null
+            || !
+            ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()
         ) {
             showDialog("No Internet Connection !");
         } else if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnected()) {
