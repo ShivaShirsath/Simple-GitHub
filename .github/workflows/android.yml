@@ -16,7 +16,13 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-          cache: gradle
+          cache: gradle      
+      - name: Bump version
+        uses: chkfung/android-version-actions@v1.1
+        with:
+          gradlePath: app/build.gradle # or app/build.gradle.kts 
+          versionCode: ${{github.run_number}}
+          versionName: ${{ github.event.commits[0].message }}
       - name: Build APK
         run: |
          gradle wrapper
