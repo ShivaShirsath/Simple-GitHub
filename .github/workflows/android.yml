@@ -35,7 +35,7 @@ jobs:
   release:
     name: Release APK
     needs: apk
-    if: startsWith(github.event.commits[0].message, 'release')
+    if: startsWith(github.event.commits[0].message, 'Update')
     runs-on: ubuntu-latest
     steps:
       - name: Download APK from build
