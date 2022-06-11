@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    loadAll(link);
+                    loadAll(webView.getUrl());
                     swipe.setRefreshing(false);
                 }
             }
