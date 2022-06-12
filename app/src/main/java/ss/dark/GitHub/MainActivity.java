@@ -99,8 +99,11 @@ public class MainActivity extends AppCompatActivity {
             new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    loadAll(webView.getUrl());
+                    if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                        loadAll(webView.getUrl());
+                    }
                     swipe.setRefreshing(false);
+                    backPressedTime = System.currentTimeMillis();
                 }
             }
         );
@@ -264,13 +267,8 @@ public class MainActivity extends AppCompatActivity {
     public void progressSetter(final SeekBar bar, final TextView tv) {
         bar.setOnSeekBarChangeListener(
                 new OnSeekBarChangeListener() {
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
+                    @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+                    @Override public void onStartTrackingTouch(SeekBar seekBar) {}
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
