@@ -42,6 +42,6 @@
                 android:fitsSystemWindows="true"
                 app:menu="@menu/right" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+        </androidx.drawerlayout.widget.DrawerLayout>
+    
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
