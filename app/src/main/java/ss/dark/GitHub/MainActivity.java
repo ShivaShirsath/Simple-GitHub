@@ -38,7 +38,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Date;
 import com.google.android.material.navigation.NavigationView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private OutputStreamWriter Wfile;
     private InputStream inputStream;
     private StringBuilder stringBuilder;
-    private SwipeRefreshLayout swipe;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,19 +92,6 @@ public class MainActivity extends AppCompatActivity {
             }
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        swipe = (SwipeRefreshLayout)findViewById(R.id.swipe);
-        swipe.setOnRefreshListener(
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if (backPressedTime + 2000 > System.currentTimeMillis()) {
-                        loadAll(webView.getUrl());
-                    }
-                    swipe.setRefreshing(false);
-                    backPressedTime = System.currentTimeMillis();
-                }
-            }
-        );
     }
     public void restart() {
         Toast.makeText(getApplicationContext(), "ReStarted", Toast.LENGTH_SHORT).show();
