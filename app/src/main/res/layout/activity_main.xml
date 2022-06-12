@@ -9,21 +9,14 @@
     android:fitsSystemWindows="true"
     android:padding="0dp"
     android:layout_margin="0dp">
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <WebView
-            android:id="@+id/WebView"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     
+    <WebView
+        android:id="@+id/WebView"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/left_nav"
         android:gravity="center"
@@ -32,15 +25,22 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/left"  />
-    
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/right_nav"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        app:headerLayout="@layout/nav_header_right"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/right" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/right_nav"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            app:headerLayout="@layout/nav_header_right"
+            android:fitsSystemWindows="true"
+            app:menu="@menu/right" />
+        
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    
 </androidx.drawerlayout.widget.DrawerLayout>
