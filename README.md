@@ -8,3 +8,10 @@
         />
     </a>
 </h1>
+
+
+<details>
+    [.keystore → .jks](https://8gwifi.org/jks.jsp)
+    
+    [.jks → Base64](https://www.browserling.com/tools/file-to-base64)
+</details>
