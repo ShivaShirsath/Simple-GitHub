@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_vscode:
                 if (item.getTitle().toString().contains("Github")) {
                     item.setTitle("Open VS code");
-                    webView.loadUrl(url.replace(".dev", ".com"));
+                    webView.loadUrl(url.replace("vscode.dev/github", "github.com"));
                 } else {
                     item.setTitle("Open Github");
-                    webView.loadUrl(url.replace(".com", ".dev"));
+                    webView.loadUrl(url.replace("github.com", "vscode.dev/github"));
                 }
                 break;
             case R.id.item_download:
