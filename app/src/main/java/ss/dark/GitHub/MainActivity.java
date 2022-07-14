@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private InputStream inputStream;
     private StringBuilder stringBuilder;
     
-    @Override     protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             //hideSystemUI();
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
         final WebView.HitTestResult result = webView.getHitTestResult();
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             menu.setHeaderTitle(result.getExtra());
 
             MenuItem.OnMenuItemClickListener menuListener = new MenuItem.OnMenuItemClickListener() {
-                @Override    public boolean onMenuItemClick(MenuItem item) {
+                @Override public boolean onMenuItemClick(MenuItem item) {
                     itemOp(item, result.getExtra());
                     return false;
                 }
@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
         webView.loadUrl(url);
     }
 
-    @Override     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri[] results = null;
@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override     public void onBackPressed() {
+    @Override public void onBackPressed() {
         if (drawer_layout.isDrawerOpen(left_nav) || drawer_layout.isDrawerOpen(right_nav)) {
             drawer_layout.closeDrawers();
         } else if (webView.canGoBack()) {
@@ -435,22 +435,22 @@ public class MainActivity extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
-    @Override     public void onConfigurationChanged(Configuration newConfig) {
+    @Override public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         refreshWebView(webView.getUrl());
     }
 
-    @Override     protected void onSaveInstanceState(Bundle outState) {
+    @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
 
-    @Override     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         webView.restoreState(savedInstanceState);
     }
 
-    @Override     public void onWindowFocusChanged(boolean hasFocus) {
+    @Override public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ? "" : " Back") : "Bye…", Toast.LENGTH_SHORT).show();
         focus++;
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override     protected void onDestroy() {
+    @Override protected void onDestroy() {
         writeToFile(getApplicationContext(), webView.getUrl());
         super.onDestroy();
     }
