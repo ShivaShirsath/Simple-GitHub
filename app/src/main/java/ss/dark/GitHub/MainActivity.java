@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                 if(DesktopMode) {
                     view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height initial-scale=0, width=1024px');", null);
                 } else {
-                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height initial-scale=0, width=device-width');", null);
+                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height initial-scale=1, width=device-width');", null);
                 }
             }
         });
