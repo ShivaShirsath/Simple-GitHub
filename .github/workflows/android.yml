@@ -28,7 +28,7 @@ jobs:
          gradle wrapper
          bash ./gradlew assembleRelease
          pwd
-         ls -a app/build/outputs/apk
+         ls -a app/build/outputs/apk/release
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         id: sign_app
@@ -40,7 +40,7 @@ jobs:
       - name: Builds APK
         run: |
          pwd
-         ls -a app/build/outputs/apk
+         ls -a app/build/outputs/apk/release
       - uses: actions/upload-artifact@v2
         with:
           name: apk
