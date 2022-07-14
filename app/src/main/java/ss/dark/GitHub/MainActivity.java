@@ -328,9 +328,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override public void onLoadResource(WebView view, String url) {
                 if(DesktopMode) {
-                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=1024px');", null);
+                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height initial-scale=1, maximum-scale=1, minimum-scale=1, width=1024px');", null);
                 } else {
-                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width');", null);
+                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'height=device-height initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width');", null);
                 }
             }
         });
