@@ -115,11 +115,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void itemOp(MenuItem item, String url) {
         switch (item.getItemId()) {
-            /*
             case R.id.item_desktop:
                 DesktopMode = !DesktopMode;
                 item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
                 break;
+            /*
             case R.id.item_dark:
                 ForceDark = !ForceDark;
                 item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
@@ -247,12 +247,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void progressSetter(final SeekBar bar, final TextView tv) {
-        bar.setOnSeekBarChangeListener(
-                new OnSeekBarChangeListener() {
-                    @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-                    @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+        bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
 
-                    @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         tv.setText("" + (progress + 1));
                         if (bar.getId() == R.id.webtextsize) {
                             switch (progress) {
@@ -282,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshWebView(String url) {
         webSettings.setJavaScriptEnabled(JavaScriptEnabled);
-        webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
+        //webSettings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
         //webSettings.setSupportZoom(true);
         webSettings.setBuiltInZoomControls(BuiltInZoomControls);
         webSettings.setDisplayZoomControls(DisplayZoomControls);
@@ -328,7 +327,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override public void onLoadResource(WebView view, String url) {
-                view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
+                if(DesktopMode) {
+                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
+                } else {
+                    view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth));", null);
+                }
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
