@@ -27,8 +27,6 @@ jobs:
         run: |
          gradle wrapper
          bash ./gradlew assembleRelease
-         pwd
-         ls -a app/build/outputs/apk/release
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         id: sign_app
@@ -37,11 +35,6 @@ jobs:
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-      - name: Builds APK
-        run: |
-         pwd
-         ls -a app/build/outputs/apk/release
-         ls ${{ steps.sign_app.outputs.signedReleaseFile }}
       - uses: actions/upload-artifact@v2
         with:
           name: apk
@@ -71,6 +64,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app-release-unsigned.apk
+          asset_path: app-release-unsigned-signed.apk
           asset_name: Dark-GitHub-${{ github.run_number }}.apk # ${{ github.event.commits[0].message }}
           asset_content_type: application/zip
