@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void itemOp(MenuItem item, String url) {
         switch (item.getItemId()) {
+            /*
             case R.id.item_desktop:
                 DesktopMode = !DesktopMode;
                 item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 ForceDark = !ForceDark;
                 item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
                 break;
+            */
             case R.id.item_open_in_chrome:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)).setPackage("com.android.chrome"));
                 break;
