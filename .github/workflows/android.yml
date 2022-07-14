@@ -41,6 +41,7 @@ jobs:
         run: |
          pwd
          ls -a app/build/outputs/apk/release
+         ls ${{ steps.sign_app.outputs.signedReleaseFile }}
       - uses: actions/upload-artifact@v2
         with:
           name: apk
