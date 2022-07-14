@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/item_dark"
-        android:title="Light Mode" />
+        android:title="Theme Mode Auto" />
 
     <item
         android:id="@+id/item_open_in_chrome"

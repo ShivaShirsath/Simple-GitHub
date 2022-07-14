@@ -71,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private InputStream inputStream;
     private StringBuilder stringBuilder;
     
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             //hideSystemUI();
@@ -156,8 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    @Override     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
         final WebView.HitTestResult result = webView.getHitTestResult();
@@ -166,8 +164,7 @@ public class MainActivity extends AppCompatActivity {
             menu.setHeaderTitle(result.getExtra());
 
             MenuItem.OnMenuItemClickListener menuListener = new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
+                @Override    public boolean onMenuItemClick(MenuItem item) {
                     itemOp(item, result.getExtra());
                     return false;
                 }
@@ -198,8 +195,7 @@ public class MainActivity extends AppCompatActivity {
         left_nav = (NavigationView) findViewById(R.id.left_nav);
         right_nav = (NavigationView) findViewById(R.id.right_nav);
         left_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            @Override public boolean onNavigationItemSelected(MenuItem item) {
                 if ((!item.getTitle().equals(user)) && item.getItemId() == R.id.item_user)
                     item.setTitle(user);
                 switch (item.getItemId()) {
@@ -233,8 +229,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         right_nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            @Override public boolean onNavigationItemSelected(MenuItem item) {
                 itemOp(item, webView.getUrl());
                 refreshWebView(webView.getUrl());
                 drawer_layout.closeDrawers();
@@ -255,8 +250,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override public void onStopTrackingTouch(SeekBar seekBar) {}
                     @Override public void onStartTrackingTouch(SeekBar seekBar) {}
 
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         tv.setText("" + (progress + 1));
                         if (bar.getId() == R.id.webtextsize) {
                             switch (progress) {
@@ -310,14 +304,12 @@ public class MainActivity extends AppCompatActivity {
         }
         webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+            @Override public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Toast.makeText(getApplicationContext(), "Failed loading app !", Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.contains("github")) {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.contains("github.com")) {
                     if (url.contains("releases") && (url.contains("download"))) {
                         setDownload(url);
                     } else {
@@ -329,9 +321,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
+            @Override public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+            }
+
+            @Override public void onLoadResource(WebView view, String url) {
+                view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -392,8 +387,7 @@ public class MainActivity extends AppCompatActivity {
         webView.loadUrl(url);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    @Override     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri[] results = null;
@@ -426,8 +420,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override     public void onBackPressed() {
         if (drawer_layout.isDrawerOpen(left_nav) || drawer_layout.isDrawerOpen(right_nav)) {
             drawer_layout.closeDrawers();
         } else if (webView.canGoBack()) {
@@ -442,26 +435,22 @@ public class MainActivity extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    @Override     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         refreshWebView(webView.getUrl());
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    @Override     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    @Override     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         webView.restoreState(savedInstanceState);
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
+    @Override     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Toast.makeText(MainActivity.this, hasFocus ? "Welcome" + (focus == 0 ? "" : " Back") : "Bye…", Toast.LENGTH_SHORT).show();
         focus++;
@@ -487,15 +476,13 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle(title)
                 .setCancelable(false).setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    @Override public void onClick(DialogInterface dialog, int which) {
                         finish();
                         dialog.dismiss();
                     }
                 })
                 .setPositiveButton("Rel⟳ad", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    @Override public void onClick(DialogInterface dialog, int which) {
                         loadAll(webView.getUrl());
                         dialog.dismiss();
                     }
@@ -527,8 +514,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override     protected void onDestroy() {
         writeToFile(getApplicationContext(), webView.getUrl());
         super.onDestroy();
     }
