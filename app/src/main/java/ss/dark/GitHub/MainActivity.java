@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private long backPressedTime = 0;
     private int focus = 0;
     private boolean
-            DesktopMode = false,
+            DesktopMode = true,
             ForceDark = true,
             JavaScriptEnabled = true,
             BuiltInZoomControls = true,
