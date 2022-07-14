@@ -29,7 +29,8 @@ jobs:
          bash ./gradlew assembleRelease
          pwd
          ls -a
-         
+         ls -a app/build/outputs/apk
+         ls -a app/build/outputs/apk/release
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
