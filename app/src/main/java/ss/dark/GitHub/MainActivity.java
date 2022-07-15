@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            //hideSystemUI();
+            hideSystemUI();
             setContentView(R.layout.activity_main);
             webView = findViewById(R.id.WebView);
             webSettings = webView.getSettings();
