@@ -10,25 +10,20 @@
         android:title="Theme Mode Auto" /-->
 
     <item
-        android:id="@+id/item_open_in_chrome"
-        android:title="Open 🌐 with⇗" />
-
-    <item
         android:id="@+id/item_reload"
         android:title="↻" />
 
     <item
         android:id="@+id/item_vscode"
         android:title="Open ⋊" />
-    
+
+    <item
+        android:id="@+id/item_open_in_chrome"
+        android:title="Open 🌐 with⇗" />
+
     <item
         android:id="@+id/item_open_in_vscode"
         android:title="Open ⋊ with⇗" />
-
-    <item
-        android:id="@+id/item_help"
-        android:title="ℹ️" />
-
 
     <item
         android:id="@+id/item_download"
@@ -37,6 +32,10 @@
     <item
         android:id="@+id/item_send"
         android:title="➣" />
+
+    <item
+        android:id="@+id/item_help"
+        android:title="ℹ️" />
 
     <item
         android:id="@+id/item_refresh"
