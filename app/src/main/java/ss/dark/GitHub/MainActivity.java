@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            hideSystemUI();
+            //hideSystemUI();
             setContentView(R.layout.activity_main);
             webView = findViewById(R.id.WebView);
             webSettings = webView.getSettings();
