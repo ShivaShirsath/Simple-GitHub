@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             */
             case R.id.item_open_in_chrome: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)).setPackage("com.android.chrome")); break;
-            case R.id.item_open_in_vscode: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url.contains("vscode.dev") ? url : url.replace("github.com", "vscode.dev/github"))).setPackage("org.chromium.webapk")); break;
+            case R.id.item_open_in_vscode: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url.contains("vscode.dev") ? url : url.replace("github.com", "vscode.dev/github"))).setPackage("org.chromium.webapk.*")); break;
             case R.id.item_reload: webView.reload(); break;
             case R.id.item_help: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome")); break;
             case R.id.item_vscode:
@@ -170,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
             };
             menu.add(0, R.id.item_open_in_chrome, 0, "Open in Chrome").setOnMenuItemClickListener(menuListener);
             if (result.getExtra().contains(user)) {
-                menu.add(0, R.id.item_vscode, 0, "Code").setOnMenuItemClickListener(menuListener);
-                menu.add(0, R.id.item_open_in_vscode, 0, "Code").setOnMenuItemClickListener(menuListener);
+                menu.add(0, R.id.item_vscode, 0, "VS Code").setOnMenuItemClickListener(menuListener);
+                menu.add(0, R.id.item_open_in_vscode, 0, "open in VS Code").setOnMenuItemClickListener(menuListener);
             }
             menu.add(0, R.id.item_download, 0, "⇩").setOnMenuItemClickListener(menuListener);
             menu.add(0, R.id.item_send, 0, "➣").setOnMenuItemClickListener(menuListener);
