@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item_desktop:
                 DesktopMode = !DesktopMode;
-                item.setTitle((DesktopMode ? "Desktop" : "Mobile") + " Mode");
+                item.setTitle(DesktopMode ? "💻" : "📱");
                 break;
             /*
             case R.id.item_dark:
@@ -137,21 +137,21 @@ public class MainActivity extends AppCompatActivity {
                 item.setTitle((ForceDark ? "Dark" : "Light") + " Mode");
                 break;
             */
-            case R.id.item_open_in_chrome: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)).setPackage("com.android.chrome")); break;
-            case R.id.item_open_in_vscode: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url.contains("vscode.dev") ? url : url.replace("github.com", "vscode.dev/github"))).setPackage("org.chromium.webapk.*")); break;
+            case R.id.item_open_in_chrome: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); break;
+            case R.id.item_open_in_vscode: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url.contains("vscode.dev") ? url : url.replace("github.com", "vscode.dev/github")))); break;
             case R.id.item_reload: webView.reload(); break;
             case R.id.item_help: startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.github.com")).setPackage("com.android.chrome")); break;
             case R.id.item_vscode:
                 if (item.getTitle().toString().contains("Github")) {
-                    item.setTitle("Open VS code");
+                    item.setTitle("Open ⋊");
                     webView.loadUrl(url.replace("vscode.dev/github", "github.com"));
                 } else {
-                    item.setTitle("Open Github");
+                    item.setTitle("Open ⎌");
                     webView.loadUrl(url.replace("github.com", "vscode.dev/github"));
                 }
                 break;
             case R.id.item_download: setDownload(url); break;
-            case R.id.item_send: startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, url).putExtra(Intent.EXTRA_TEXT, url).setType("text/*"), "Share!")); break;
+            case R.id.item_send: startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, url).putExtra(Intent.EXTRA_TEXT, url).setType("*/*"), "Share!")); break;
             case R.id.item_refresh: writeToFile(getApplicationContext(), git + user); break;
 
             default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
@@ -168,12 +168,12 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             };
-            menu.add(0, R.id.item_open_in_chrome, 0, "Open in Chrome").setOnMenuItemClickListener(menuListener);
+            menu.add(0, R.id.item_open_in_chrome, 0, "Open 🌐 with⇗").setOnMenuItemClickListener(menuListener);
             if (result.getExtra().contains(user)) {
-                menu.add(0, R.id.item_vscode, 0, "VS Code").setOnMenuItemClickListener(menuListener);
-                menu.add(0, R.id.item_open_in_vscode, 0, "open in VS Code").setOnMenuItemClickListener(menuListener);
+                menu.add(0, R.id.item_vscode, 0, "Open ⋊").setOnMenuItemClickListener(menuListener);
+                menu.add(0, R.id.item_open_in_vscode, 0, "Open ⋊ with⇗").setOnMenuItemClickListener(menuListener);
             }
-            menu.add(0, R.id.item_download, 0, "⇩").setOnMenuItemClickListener(menuListener);
+            menu.add(0, R.id.item_download, 0, "📥").setOnMenuItemClickListener(menuListener);
             menu.add(0, R.id.item_send, 0, "➣").setOnMenuItemClickListener(menuListener);
         }
     }
@@ -198,10 +198,25 @@ public class MainActivity extends AppCompatActivity {
                 if ((!item.getTitle().equals(user)) && item.getItemId() == R.id.item_user)
                     item.setTitle(user);
                 switch (item.getItemId()) {
-                    case R.id.item_user:     case R.id.item_newRepo:     case R.id.item_settings:     case R.id.item_dashboard:     case R.id.item_pulls:     case R.id.item_issues:     case R.id.item_marketplace:     case R.id.item_explore:     case R.id.item_codespaces: link = git + item.getTitle().toString().toLowerCase(); break;
-
-                    case R.id.item_repo:     case R.id.item_project:     case R.id.item_package:     case R.id.item_stars:     case R.id.item_followers:     case R.id.item_following: link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase(); break;
-                    
+                    case R.id.item_user:
+                    case R.id.item_newRepo:
+                    case R.id.item_settings:
+                    case R.id.item_dashboard:
+                    case R.id.item_pulls:
+                    case R.id.item_issues:
+                    case R.id.item_marketplace:
+                    case R.id.item_explore:
+                    case R.id.item_codespaces:
+                        link = git + item.getTitle().toString().toLowerCase();
+                        break;
+                    case R.id.item_repo:
+                    case R.id.item_project:
+                    case R.id.item_package:
+                    case R.id.item_stars:
+                    case R.id.item_followers:
+                    case R.id.item_following:
+                        link = git + user + tab + String.valueOf(item.getTitle()).toLowerCase();
+                        break;
                     default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
                 }
                 refreshWebView(link);

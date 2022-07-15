@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/item_desktop"
-        android:title="Mobile Mode" />
+        android:title="💻" />
 
     <!--item
         android:id="@+id/item_dark"
@@ -11,27 +11,28 @@
 
     <item
         android:id="@+id/item_open_in_chrome"
-        android:title="Open in Chrome" />
-    
-    <item
-        android:id="@+id/item_open_in_vscode"
-        android:title="Open in VS code" />
+        android:title="Open 🌐 with⇗" />
 
     <item
         android:id="@+id/item_reload"
-        android:title="Reload" />
-
-    <item
-        android:id="@+id/item_help"
-        android:title="Help" />
+        android:title="↻" />
 
     <item
         android:id="@+id/item_vscode"
-        android:title="Open VS code" />
+        android:title="Open ⋊" />
+    
+    <item
+        android:id="@+id/item_open_in_vscode"
+        android:title="Open ⋊ with⇗" />
+
+    <item
+        android:id="@+id/item_help"
+        android:title="ℹ️" />
+
 
     <item
         android:id="@+id/item_download"
-        android:title="⇩" />
+        android:title="📥" />
 
     <item
         android:id="@+id/item_send"
@@ -39,6 +40,6 @@
 
     <item
         android:id="@+id/item_refresh"
-        android:title="`" />
+        android:title="‎ ‎" />
 
 </menu>
