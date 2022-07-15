@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.item_download: setDownload(url); break;
-            case R.id.item_send: startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, url).putExtra(Intent.EXTRA_TEXT, url).setType("*/*"), "Share!")); break;
+            case R.id.item_send: startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, url).putExtra(Intent.EXTRA_TEXT, url).setType("text/*"), "Share !")); break;
             case R.id.item_refresh: writeToFile(getApplicationContext(), git + user); break;
 
             default: Toast.makeText(MainActivity.this, "Invalid", Toast.LENGTH_SHORT).show();
