@@ -397,12 +397,12 @@ public class MainActivity extends AppCompatActivity {
     @Override public void onBackPressed() {
         if (drawer_layout.isDrawerOpen(left_nav) || drawer_layout.isDrawerOpen(right_nav)) {
             drawer_layout.closeDrawers();
-        } else if (webView.canGoBack()) {
-            webView.goBack();
         } else if (backPressedTime + 2000 > System.currentTimeMillis()) {
             super.onBackPressed();
             finish();
             return;
+        } else if (webView.canGoBack()) {
+            webView.goBack();
         } else {
             Toast.makeText(MainActivity.this, "Press back again to exit", Toast.LENGTH_SHORT).show();
         }
