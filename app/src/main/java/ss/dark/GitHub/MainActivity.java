@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private long backPressedTime = 0;
     private int focus = 0;
     private boolean
-            DesktopMode = true,
+            DesktopMode = false,
             ForceDark = true,
             JavaScriptEnabled = true,
             BuiltInZoomControls = true,
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item_desktop:
                 DesktopMode = !DesktopMode;
-                item.setTitle(DesktopMode ? "💻" : "📱");
+                item.setTitle(DesktopMode ? "📱" : "💻");
                 break;
             /*
             case R.id.item_dark:
